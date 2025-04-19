@@ -5,6 +5,8 @@ import  Header from './Header';
 import  PlayersList from './PlayerList';
 import  GameCanvas  from './GameCanvas';
 import  BettingControls from './BettingControls';
+import Game from './Game';
+import GameTestScroll from './GameTestScroll';
 
 // export default function HomePage() {
 //   return (
@@ -17,9 +19,9 @@ import  BettingControls from './BettingControls';
 // <Flex direction="column" h="100vh" bg="gray.900">
 // <Heading>" Hello Pavan Here" </Heading>
 // <Header />
-// <Flex flex="1" overflow="hidden">
+// <Flex flex={1} overflow="hidden">
 //   <PlayersList />
-//   <Flex direction="column" flex="1">
+//   <Flex direction="column" flex={1}>
 //     <GameCanvas />
 //     <BettingControls />
 //   </Flex>
@@ -42,18 +44,18 @@ export default function HomePage() {
       <Header />
 
       {isMobile ? (
-        <Flex direction="column" flex="1" overflow="hidden">
-          <PlayersList />
-          <Flex direction="column" flex="1">
-            <GameCanvas />
+        <Flex direction="column" flex={1} overflow="show" >
+          <Flex direction="column" flex={1}>
+          <GameTestScroll />
             <BettingControls />
           </Flex>
+          <PlayersList />
         </Flex>
       ) : (
-        <Flex flex="1" overflow="hidden">
+        <Flex flex={1} overflow="show">
           <PlayersList />
-          <Flex direction="column" flex="1">
-            <GameCanvas />
+          <Flex direction="column" flex={1}>
+            <GameTestScroll />
             <BettingControls />
           </Flex>
         </Flex>

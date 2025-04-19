@@ -20,10 +20,10 @@ import CrashGameUI from "./Pages/Aviator/CrashGameUI"
 import MriyaGameUI from "./Pages/MriyaGameUI"
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
+  // <ChakraProvider theme={theme}>
     <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
+      <Grid minH={200} >
+        {/* <ColorModeSwitcher justifySelf="flex-end" /> */}
         <Stack direction={"column"} spacing={30}>
           {/* <Logo h={40} pointerEvents="none" />
           <Text>
@@ -42,7 +42,7 @@ export const App = () => (
         </Stack>
       </Grid>
     </Box>
-  </ChakraProvider>
+  // </ChakraProvider>
 
     // <Box minH="100vh" color="inherit" mb={16}>
     //   {/* Header */}

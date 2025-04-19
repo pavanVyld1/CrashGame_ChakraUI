@@ -34,7 +34,7 @@ import {
         </Flex>
   
         {/* Game Layout */}
-        <Flex flex="1" direction={isMobile ? "column" : "row"} borderWidth="1px" borderColor={"white"}>
+        <Flex flex={1} direction={isMobile ? "column" : "row"} borderWidth="1px" borderColor={"white"}>
           {/* Players List */}
           <Box
             flexBasis={isMobile ? "100%" : "25%"}

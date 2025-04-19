@@ -35,10 +35,10 @@ const BettingControls = () => {
     >
       {/* LEFT SIDE */}
       <Stack spacing={4}>
-        <Flex flexWrap="wrap" align="center" gap={2} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} alignItems="stretch" bgColor={"gray.900"}>
+        <Flex flex={1} align="center" gap={2} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} alignItems="stretch" bgColor={"gray.900"}>
           <VStack borderWidth={1} gap={2} bgColor={"gray.900"} borderRadius={"md"} borderColor={"gray.700"} alignItems={"center"} >
           <Heading fontSize={"sm"} color="gray.100">Bet</Heading>
-          <HStack borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"}>
+          <HStack flex={1} borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"}>
           <Button background={"gray.700"} variant={"solid"} rounded={"full"} w={9} h={9} iconSpacing={2}> {/* need to add on click*/}
             <MinusIcon color={"white"}/>
           </Button>
@@ -59,7 +59,7 @@ const BettingControls = () => {
             <AddIcon color={"white"} />
           </Button>
           </HStack>
-          <Flex flexWrap="wrap" gap={2} mt={{ base: 2, sm: 0 }} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} direction={"row"}>
+          <Flex gap={2} mt={{ base: 2, sm: 0 }} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} direction={"row"}>
             <Button variant="outline" size="sm" color={"blue.100"} fontWeight={"bold"}>
               1 $
             </Button>
@@ -150,10 +150,10 @@ const BettingControls = () => {
           Place your bet
         </Button> */}
 
-<Flex flexWrap="wrap" align="center" gap={2} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} alignItems="stretch" bgColor={"gray.900"}>
+<Flex flex={1} align="center" gap={2} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} alignItems="stretch" bgColor={"gray.900"}>
           <VStack borderWidth={1} gap={2} bgColor={"gray.900"} borderRadius={"md"} borderColor={"gray.700"} alignItems={"center"} >
           <Heading fontSize={"sm"} color="gray.100">Bet</Heading>
-          <HStack borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"}>
+          <HStack flex={1} borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"}>
           <Button background={"gray.700"} variant={"solid"} rounded={"full"} w={9} h={9} iconSpacing={2}> {/* need to add on click*/}
             <MinusIcon color={"white"}/>
           </Button>
@@ -174,7 +174,7 @@ const BettingControls = () => {
             <AddIcon color={"white"} />
           </Button>
           </HStack>
-          <Flex flexWrap="wrap" gap={2} mt={{ base: 2, sm: 0 }} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} direction={"row"}>
+          <Flex gap={2} mt={{ base: 2, sm: 0 }} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} direction={"row"}>
             <Button variant="outline" size="sm" color={"blue.100"} fontWeight={"bold"}>
               1 $
             </Button>
