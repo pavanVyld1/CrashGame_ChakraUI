@@ -25,14 +25,14 @@ export default class TestScrollScene extends Phaser.Scene {
         this.load.spineJson('apple_json','/assets/spine/apple.json');
     }
 
-    create(){
+    create() {
         this.createTileSprites();
 
         // const appleSpine = this.add.spine(this.scale.width / 2, this.scale.height - 100, 'apple_json','apple_atlas');//.setOrigin(0.5, 0.5).setScale(0.5);
 
         // appleSpine.animationState.addAnimation(0,'win',true,0);
-        console.log("TestScroll Scene create called");
-
+        console.log("TestScroll Scene create called w : " + this.scale.width + "  h : " + this.scale.height);
+        // this.scale.on("resize", this.resizeGame, this);
     }
 
     createTileSprites(){
@@ -65,9 +65,28 @@ export default class TestScrollScene extends Phaser.Scene {
 
     update(time: number, delta: number): void {
         
-        this.tile_bg.tilePositionX += (0.3);
+      this.tile_bg.tilePositionX += (0.3);
       this.tile_tree.tilePositionX += (0.35);
       this.tile_fg.tilePositionX += (0.5);
       this.tile_fog.tilePositionX += (0.8);
-    }   
+    }
+    
+    resize(width: number, height: number) {
+      // Custom method, React will call this via reference
+      console.log('Scene received resize:', width, height);
+
+      console.log('Scene received Current size:', this.scale.width, this.scale.height);
+      this.scale.resize(width, height); // Optional if React does it already
+      this.cameras.resize(width, height);
+      // Example: reposition game objects
+      // this.mySprite.setPosition(width / 2, height / 2);
+      this.tile_bg?.setDisplaySize(width,height);
+      this.tile_tree?.setDisplaySize(width,height);
+      this.tile_fog?.setDisplaySize(width,height);
+      this.tile_fg?.setDisplaySize(width,height);
+    }
+
+    private resizeGame(gameSize: Phaser.Structs.Size) {
+      console.log("Resized to:", gameSize.width, gameSize.height);
+    }
 }

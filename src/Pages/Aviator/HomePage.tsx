@@ -7,6 +7,7 @@ import  GameCanvas  from './GameCanvas';
 import  BettingControls from './BettingControls';
 import Game from './Game';
 import GameTestScroll from './GameTestScroll';
+import GameTestScrollExp from './GameTestScrollExp';
 
 // export default function HomePage() {
 //   return (
@@ -42,8 +43,14 @@ export default function HomePage() {
 
 <Flex direction={'column'} h="100vh" bg="gray.950" >
       <Header />
-
-      {isMobile ? (
+      <Flex flex={1} overflow="show" direction={isMobile ? "column" : undefined}>
+          <PlayersList id="playerList" order={isMobile ? 2: 0}/>
+          <Flex id="gameArea"direction="column" flexGrow="1" order="1">
+            <GameTestScroll/>
+            <BettingControls />
+          </Flex>
+        </Flex>
+      {/* {isMobile ? (
         <Flex direction="column" flex={1} overflow="show" >
           <Flex direction="column" flex={1}>
           <GameTestScroll />
@@ -59,7 +66,8 @@ export default function HomePage() {
             <BettingControls />
           </Flex>
         </Flex>
-      )}
+      )} */}
+
     </Flex>
   )
 }
