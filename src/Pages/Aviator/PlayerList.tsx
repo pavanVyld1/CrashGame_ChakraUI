@@ -1,5 +1,5 @@
 // src/components/PlayersList.tsx
-import { Box, Text, VStack, HStack, Divider, GridItem, Grid, useBreakpointValue, Heading } from '@chakra-ui/react';
+import { Box, Text, VStack, HStack, Divider, GridItem, Grid, useBreakpointValue, Heading, BoxProps } from '@chakra-ui/react';
 import { useState } from 'react';
 
 // const mockPlayers = Array.from({ length: 20 }).map((_, i) => ({
@@ -31,8 +31,13 @@ const mockPlayers = new Array<PlayerBet>(
   { player: "player7819", bet: "100.00 USD", collect: "--", win: "--" },
 );
 
-const PlayersList = () => {
-  const isMobile = useBreakpointValue({ base: true, md: false });
+type customBoxProps = BoxProps & {
+  children?: React.ReactNode;
+};
+
+const PlayersList = (props: customBoxProps) => {
+  const isMobile = useBreakpointValue({ base: true, sm: true, md: true, lg: false });
+
   return (
     // <Box w="100" bg="gray.800" p="4" overflowX="auto" overflowY="auto" borderWidth="1px" borderColor={"red"} minH={100}>
     //   <Text fontWeight="bold" mb="4" color="white">All Bets</Text>
@@ -52,11 +57,12 @@ const PlayersList = () => {
       backdropFilter="blur(8px)"
       border="1px solid"
       borderColor="gray.600"
-      minW="12rem"
+      minW={isMobile ? "full" : "25rem"}
       w={isMobile ? "full" : "25rem"}
       h={isMobile ? "20rem" : "auto"}
       borderRadius="md"
       overflow="hidden"
+      {...props}
     >
       <Box p={4} borderBottom="1px solid" borderColor="gray.600">
         <Heading size="md" color="gray.200">Players</Heading>

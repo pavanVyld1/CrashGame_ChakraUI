@@ -7,6 +7,7 @@ import  GameCanvas  from './GameCanvas';
 import  BettingControls from './BettingControls';
 import Game from './Game';
 import GameTestScroll from './GameTestScroll';
+import MriyaGameUI from '../MriyaGameUI';
 
 // export default function HomePage() {
 //   return (
@@ -40,26 +41,17 @@ export default function HomePage() {
     //   <Button colorScheme="teal">Get Started</Button>
     // </Box>
 
-<Flex direction={'column'} h="100vh" bg="gray.950" >
+<Flex direction={'column'} h="100vh" w="100vw" bg="gray.950" >
       <Header />
 
-      {isMobile ? (
-        <Flex direction="column" flex={1} overflow="show" >
-          <Flex direction="column" flex={1}>
-          <GameTestScroll />
-            <BettingControls />
-          </Flex>
-          <PlayersList />
-        </Flex>
-      ) : (
-        <Flex flex={1} overflow="show">
-          <PlayersList />
+      <Flex flex={1} overflow="show" direction={isMobile ? "column" : undefined} >
+          <PlayersList order={isMobile ? 2 : 0}/>
           <Flex direction="column" flex={1}>
             <GameTestScroll />
+            {/* <MriyaGameUI /> */}
             <BettingControls />
           </Flex>
         </Flex>
-      )}
     </Flex>
   )
 }

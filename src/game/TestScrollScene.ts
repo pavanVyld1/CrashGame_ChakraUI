@@ -38,6 +38,8 @@ export default class TestScrollScene extends Phaser.Scene {
     createTileSprites(){
           const { width, height} = this.scale;
     
+          console.log("Scele : W" + width + " H : " + height);
+
           this.tile_fog = this.addTileWithScale("tile_fog",width,height);
           this.tile_fog.setDepth(100);
     

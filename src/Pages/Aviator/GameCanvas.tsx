@@ -10,10 +10,12 @@ const GameCanvas = () => {
       justifyContent="center" 
       borderWidth="1px" 
       borderColor={"white"} 
-      w='full'
-      h={isMobile? undefined : 'full'}
+      w={'full'}
+      // h={isMobile? undefined : 'full'}
+      h={'full'}
       // eslint-disable-next-line no-restricted-globals
-      aspectRatio={isMobile? 1.7 : undefined}>
+      // aspectRatio={isMobile? 1.7 : undefined}
+      >
       <Text fontSize="6xl" fontWeight="bold" color="purple.200">11.96x</Text>
     </Box>
   );
