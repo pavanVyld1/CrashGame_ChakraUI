@@ -62,7 +62,8 @@ const PlayersList = (props: customBoxProps) => {
       border="1px solid"
       borderColor="gray.600"
       minW={isPortrait ? "full" : "25rem"}
-      minH={isPortrait ? "20rem" : "auto"}
+      minH={isPortrait ? "25rem" : "auto"}
+      maxH={isPortrait ? "auto" : "full"}
       w={isPortrait ? "full" : "25rem"}
       h={isPortrait ? "20rem" : "full"}
       borderRadius="md"
