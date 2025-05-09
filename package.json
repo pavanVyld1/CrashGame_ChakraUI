@@ -13,7 +13,6 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^28.1.8",
     "@types/node": "^12.20.55",
-    "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
     "framer-motion": "^6.5.1",
     "phaser": "^3.88.2",
@@ -44,5 +43,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.21",
+    "@types/react-native": "^0.73.0"
   }
 }

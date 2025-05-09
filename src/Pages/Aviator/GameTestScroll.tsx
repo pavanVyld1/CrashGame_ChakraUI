@@ -9,47 +9,80 @@ import TestScrollScene from '../../game/TestScrollScene';
 // import { toaster } from "../../components/ui/toaster"
 import { SpinePlugin } from "@esotericsoftware/spine-phaser"; 
 import { Box, useBreakpointValue ,Text , useToast } from '@chakra-ui/react';
+import PlayersList from './PlayerList';
+import { useOrientation } from '../../hooks/useOrientation';
 
-const GameTestScroll: React.FC = () => {
-    const toaster = useToast();
-  const isMobile = useBreakpointValue({ base: true, md: false });
+// const GameTestScroll: React.FC = () =>{//React.FC<{ width: number; height: number }> = ({ width, height }) => {
+const GameTestScroll: React.FC<{ width: number; height: number }> = ({ width, height }) => {
+  const toaster = useToast();
+
+  const isMobileWidth = useBreakpointValue({ base: true, sm: true, md: false , lg: false, xl: false});
+  const isPortrait = useOrientation() === 'portrait';
+  const isMobile = isMobileWidth && isPortrait;
+
   const gameRef = useRef<HTMLDivElement | null>(null);
   const gameContainerRef = useRef<HTMLDivElement | null>(null);
   const gameInstanceRef = useRef<Phaser.Game | null>(null);
   const sceneRef = useRef<TestScrollScene | null>(null);
   
   const [computedWidth, setComputedWidth] = useState<number | null>(null);
+  const [dimensions, setDimensions] = useState<{width: number; height: number;} | null>(null);
   // Initialize the game
 
   useEffect(() => {
-    const updateWidth = () => {
-      const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
-      const vw = window.innerWidth;
-      var value = 0;
-      if(isMobile){
-        value = window.innerWidth;
-      }else{
-        value = vw - (25 * remInPx);
-      }
-      console.log("computed w : " + value);
-      setComputedWidth(value);
-    };
+    console.log("TestScroll  isMobile : " + isMobile);
+    // const updateWidth = () => {
+    //   const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    //   const vw = window.innerWidth;
+    //   var value = 0;
+    //   if(isMobile){
+    //     value = window.innerWidth;
+    //   }else{
+    //     value = vw - (25 * remInPx);
+    //   }
+    //   console.log("computed w : " + value);
+    //   setComputedWidth(value);
+    // };
 
-    updateWidth(); // Initial run
 
+    // const updateDimensions = () => {
+    //   const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    //   const vw = window.innerWidth;
+    //   const vh = window.innerHeight;
+
+    //   let width = 0;
+    //   let height = 0;
+    //   if (isMobile) {
+    //     width = vw;
+    //     height = vh - (20 * remInPx);;
+    //   } else {
+    //     width = vw - (25 * remInPx);
+    //     height = vh;
+    //   }
+    //   console.log("Computed dimensions:", { width, height });
+    //   setDimensions({ width, height });
+    // };
+
+    // // updateWidth(); // Initial run
+    // updateDimensions(); // Initial run
     // window.addEventListener("resize", updateWidth);
+    console.log("Calculated and Passed height : " + height +" Width : " + width);
+    setDimensions({ width, height });
     return () => {
       // window.removeEventListener("resize", updateWidth);
     };
   },[])
 
   useEffect(() => {
-    console.log("computed width : 1 " + computedWidth);
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+    console.log("computed height : 1 " + vh);
+    console.log("computed width : 1 " + vw);
 
     requestAnimationFrame(() => {
-    console.log("computed width : 2 " + computedWidth);
+    console.log("computed width : 2 " + dimensions?.height);
     // if (!gameRef.current || gameInstanceRef.current || !gameContainerRef.current || !computedWidth) return;
-    if(computedWidth == null) return;
+    if(dimensions == null) return;
 
     if(gameRef.current == null)
       return;
@@ -60,13 +93,14 @@ const GameTestScroll: React.FC = () => {
     if(gameInstanceRef.current != null)
       return;
     console.log("gameRef.current.clientWidth " + gameContainerRef.current.clientWidth);
+    console.log("gameRef.current.clientHeight " + gameContainerRef.current.clientHeight);
     
-    console.log("computed width : 3 " + computedWidth);
+    // console.log("computed width : 3 " + computedWidth);
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
       parent: gameRef.current,
-      width: 1000,
-      height: gameContainerRef.current.clientHeight,
+      width: width,
+      height: height,
       backgroundColor: '#87CEEB',
       scene: [new TestScrollScene()],
       scale: {
@@ -98,7 +132,7 @@ const GameTestScroll: React.FC = () => {
         sceneRef.current = null;
       }
     };
-  }, [computedWidth]);
+  }, [dimensions]);
 
   return (
     // <Box w={'calc(100% - 0rem)'} bgColor={'black'} h={'calc(100% - 4rem)' }>
@@ -111,10 +145,13 @@ const GameTestScroll: React.FC = () => {
     borderColor={"yellow"} 
     bgColor={"blue"}
     position={"relative"} alignSelf={"center"} alignContent={"center"}
-    w={ isMobile? 'full' : 'calc(100vw - 25rem)'}
-    // w={computedWidth}
-    // h={isMobile? undefined : 'full'}
-    h={'full'}
+    // w={ isMobile? 'full' : 'calc(100vw - 25rem)'}
+    // // w={computedWidth}
+    // // h={isMobile? undefined : 'full'}
+    // // h={'full'}
+    h={ isPortrait? 'calc(100vh * 1 / 3)' : dimensions?.height}
+    w={ isPortrait? 'full' : dimensions?.width}
+    // h={isMobile ? 'full' : dimensions?.height}
     ref={gameContainerRef}
     >
         <Box ref={gameRef}>

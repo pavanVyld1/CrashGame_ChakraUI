@@ -1,5 +1,5 @@
 // src/pages/HomePage.tsx
-import { Box, Button, Flex, Heading, Text ,useBreakpointValue} from '@chakra-ui/react'
+import { Box, Button, Flex, Heading, Text ,useBreakpointValue, useMediaQuery} from '@chakra-ui/react'
 import  Header from './Header';
 
 import  PlayersList from './PlayerList';
@@ -8,6 +8,8 @@ import  BettingControls from './BettingControls';
 import Game from './Game';
 import GameTestScroll from './GameTestScroll';
 import MriyaGameUI from '../MriyaGameUI';
+import { useEffect, useRef, useState } from 'react';
+import { useOrientation } from '../../hooks/useOrientation';
 
 // export default function HomePage() {
 //   return (
@@ -33,7 +35,70 @@ import MriyaGameUI from '../MriyaGameUI';
 
 
 export default function HomePage() {
-  const isMobile = useBreakpointValue({ base: true, md: false });
+  
+  const isMobileWidth = useBreakpointValue({ base: true, sm: true, md: false , lg: false, xl: false});
+  const isMobileWidthName = useBreakpointValue({ base: "base", sm: "small", md: "md" , lg: "large", xl: "xl"});
+  const isPortrait = useOrientation() === 'portrait';
+  const isMobile = isMobileWidth && isPortrait;
+
+  const headerRef = useRef<HTMLDivElement>(null);
+  const gamecontainerRef = useRef<HTMLDivElement>(null);
+  const controlsRef = useRef<HTMLDivElement>(null);
+  const playerListRef = useRef<HTMLDivElement>(null);
+  const homePageref = useRef<HTMLDivElement>(null);
+
+  console.log("Width Name : "+ isMobileWidthName);
+  const [readyToRenderGame, setReadyToRenderGame] = useState(false);
+
+  const [dimensions, setGameCanvasDimensions] = useState<{width: number; height: number;} | null>(null); 
+
+    const updateDimensions = () => {
+    if (!gamecontainerRef.current || !controlsRef.current || !playerListRef.current || !homePageref.current || !headerRef.current) return;
+    
+    
+    const containerRect = gamecontainerRef.current.getBoundingClientRect();
+    const controlsRect = controlsRef.current.getBoundingClientRect();
+    const playerRect = playerListRef.current.getBoundingClientRect();
+    const homePageRect = homePageref.current.getBoundingClientRect();
+    const headerRect = headerRef.current.getBoundingClientRect();
+    console.log("Home page isMobileWidth "+isMobileWidth+  " isMobile " + isMobile + " isPortrait : " + isPortrait);
+    console.log("containerRect the Height "+ containerRect.height +" and width " + containerRect.width);
+    console.log("controlsHeight the Height "+ controlsRect.height + " width :" + controlsRect.width);
+    console.log("playerRect the Height "+ playerRect.height +" and width " + playerRect.width);
+    console.log("homePageRect the Height "+ homePageRect.height +" and width " + homePageRect.width);
+    console.log("headerRect the Height "+ headerRect.height +" and width " + headerRect.width);
+
+    if(isMobile){
+      console.log("playerrect the Height Mobile"+ playerRect.height);
+      setGameCanvasDimensions({
+        width: homePageRect.width,
+        height: homePageRect.height// > 0 ? (homePageRect.height - playerRect.height - controlsRect.height - headerRect.height) : homePageRect.height,
+      });
+    } else {
+      console.log("playerrect the Height "+ playerRect.height);
+      console.log("homepage : width " + (homePageRect.width - playerRect.width) + " height : " +  (homePageRect.height - controlsRect.height));
+     setGameCanvasDimensions({
+        width: (homePageRect.width - playerRect.width),
+        height: (homePageRect.height - controlsRect.height - headerRect.height),
+      });
+    }
+    // console.log("Setting the Height "+ dimensions.height +" and width " + dimensions.width);
+  };
+
+    useEffect(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+        // setTimeout(updateDimensions, 0);
+          updateDimensions();
+      });
+    });
+    // window.addEventListener("resize", updateDimensions);
+    return () => {
+      // window.removeEventListener("resize", updateDimensions);
+    }
+  },[]);
+
+
   return (
     // <Box p={8} textAlign="center">
     //   <Heading mb={4}>Welcome to Chakra UI</Heading>
@@ -41,17 +106,29 @@ export default function HomePage() {
     //   <Button colorScheme="teal">Get Started</Button>
     // </Box>
 
-<Flex direction={'column'} h="100vh" w="100vw" bg="gray.950" >
-      <Header />
-
-      <Flex flex={1} overflow="show" direction={isMobile ? "column" : undefined} >
-          <PlayersList order={isMobile ? 2 : 0}/>
-          <Flex direction="column" flex={1}>
-            <GameTestScroll />
+<Flex direction={'column'} h="100vh" w="100vw" bg="gray.950" ref={homePageref} >
+      <Box ref={headerRef}>
+        <Header />
+      </Box>
+      <Flex flex={1} overflow="show" direction={isPortrait ? "column" : undefined} >
+        <Box order={isPortrait ? 2 : 0} ref={playerListRef}>
+          <PlayersList order={isPortrait ? 2 : 0}/>
+        </Box>
+         <Flex direction="column" flex={1}>
+            
             {/* <MriyaGameUI /> */}
-            <BettingControls />
+            <Box order={1} ref={controlsRef}>
+              <BettingControls />
+            </Box>
+            <Box order={0} ref={gamecontainerRef}>
+              {dimensions != null && <GameTestScroll width={dimensions.width} height={dimensions.height}/>}
+              {/* <GameCanvas/> */}
+            </Box>
           </Flex>
+
         </Flex>
     </Flex>
   )
 }
+
+          

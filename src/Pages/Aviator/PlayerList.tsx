@@ -1,6 +1,7 @@
 // src/components/PlayersList.tsx
-import { Box, Text, VStack, HStack, Divider, GridItem, Grid, useBreakpointValue, Heading, BoxProps } from '@chakra-ui/react';
+import { Box, Text, VStack, HStack, Divider, GridItem, Grid, useBreakpointValue, Heading, BoxProps, Flex } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useOrientation } from '../../hooks/useOrientation';
 
 // const mockPlayers = Array.from({ length: 20 }).map((_, i) => ({
 //   player: `d***${i}`,
@@ -24,11 +25,10 @@ const mockPlayers = new Array<PlayerBet>(
   { player: "player7812", bet: "100.00 USD", collect: "--", win: "--" },
   { player: "player7813", bet: "100.00 USD", collect: "--", win: "--" },
   { player: "player7814", bet: "100.00 USD", collect: "--", win: "--" },
-  { player: "player7815", bet: "100.00 USD", collect: "--", win: "--" },
-  { player: "player7816", bet: "100.00 USD", collect: "--", win: "--" },
-  { player: "player7817", bet: "100.00 USD", collect: "--", win: "--" },
-  { player: "player7818", bet: "100.00 USD", collect: "--", win: "--" },
-  { player: "player7819", bet: "100.00 USD", collect: "--", win: "--" },
+  { player: "player7812", bet: "100.00 USD", collect: "--", win: "--" },
+  { player: "player7813", bet: "100.00 USD", collect: "--", win: "--" },
+  { player: "player7814", bet: "100.00 USD", collect: "--", win: "--" },
+  
 );
 
 type customBoxProps = BoxProps & {
@@ -36,8 +36,12 @@ type customBoxProps = BoxProps & {
 };
 
 const PlayersList = (props: customBoxProps) => {
-  const isMobile = useBreakpointValue({ base: true, sm: true, md: true, lg: false });
+    const isMobileWidth = useBreakpointValue({ base: true, sm: true, md: false , lg: false, xl: false});
+    const isPortrait = useOrientation() === 'portrait';
+    const isMobile = isMobileWidth && isPortrait;
 
+
+    console.log("Player List : isMobile " + isMobile);
   return (
     // <Box w="100" bg="gray.800" p="4" overflowX="auto" overflowY="auto" borderWidth="1px" borderColor={"red"} minH={100}>
     //   <Text fontWeight="bold" mb="4" color="white">All Bets</Text>
@@ -52,17 +56,19 @@ const PlayersList = (props: customBoxProps) => {
     //   </VStack>
     // </Box>
 
-    <Box
+    <Flex
       bg="gray.800"
       backdropFilter="blur(8px)"
       border="1px solid"
       borderColor="gray.600"
-      minW={isMobile ? "full" : "25rem"}
-      w={isMobile ? "full" : "25rem"}
-      h={isMobile ? "20rem" : "auto"}
+      minW={isPortrait ? "full" : "25rem"}
+      minH={isPortrait ? "20rem" : "auto"}
+      w={isPortrait ? "full" : "25rem"}
+      h={isPortrait ? "20rem" : "full"}
       borderRadius="md"
       overflow="hidden"
-      {...props}
+      direction={'column'}
+      // {...props}
     >
       <Box p={4} borderBottom="1px solid" borderColor="gray.600">
         <Heading size="md" color="gray.200">Players</Heading>
@@ -98,7 +104,7 @@ const PlayersList = (props: customBoxProps) => {
           ))}
         </VStack>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 
