@@ -2,6 +2,10 @@
 import { Box, Text, useBreakpointValue } from '@chakra-ui/react';
 
 const GameCanvas = () => {
+
+  console.log("GameCanvas : Button clicked" );
+  // return "GameCanvasFuc";
+
   const isMobile = useBreakpointValue({ base: true, md: false });
   return (
     <Box bgGradient="radial(blackAlpha.800, purple.800)" 
@@ -20,5 +24,7 @@ const GameCanvas = () => {
     </Box>
   );
 };
+
+
 
 export default GameCanvas;

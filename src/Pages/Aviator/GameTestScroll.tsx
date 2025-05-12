@@ -45,31 +45,31 @@ const GameTestScroll: React.FC<{ width: number; height: number }> = ({ width, he
     // };
 
 
-    // const updateDimensions = () => {
-    //   const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    //   const vw = window.innerWidth;
-    //   const vh = window.innerHeight;
+    const updateDimensions = () => {
+      const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
-    //   let width = 0;
-    //   let height = 0;
-    //   if (isMobile) {
-    //     width = vw;
-    //     height = vh - (20 * remInPx);;
-    //   } else {
-    //     width = vw - (25 * remInPx);
-    //     height = vh;
-    //   }
-    //   console.log("Computed dimensions:", { width, height });
-    //   setDimensions({ width, height });
-    // };
+      let width = 0;
+      let height = 0;
+      if (isMobile) {
+        width = vw;
+        height = vh - (20 * remInPx);;
+      } else {
+        width = vw - (25 * remInPx);
+        height = vh;
+      }
+      console.log("Computed dimensions:", { width, height });
+      setDimensions({ width, height });
+    };
 
     // // updateWidth(); // Initial run
-    // updateDimensions(); // Initial run
-    // window.addEventListener("resize", updateWidth);
+    updateDimensions(); // Initial run
+    window.addEventListener("resize", updateDimensions);
     console.log("Calculated and Passed height : " + height +" Width : " + width);
     setDimensions({ width, height });
     return () => {
-      // window.removeEventListener("resize", updateWidth);
+      window.removeEventListener("resize", updateDimensions);
     };
   },[])
 

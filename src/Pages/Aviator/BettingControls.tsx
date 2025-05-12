@@ -19,6 +19,7 @@ import { MinusIcon, AddIcon } from "@chakra-ui/icons";
 import { FaBold } from "react-icons/fa";
 import Header from "./Header";
 import { useOrientation } from "../../hooks/useOrientation";
+import GameCanvas from "./GameCanvas";
 
 const BettingControls = () => {
     const isMobileWidth = useBreakpointValue({ base: true, sm: true, md: false , lg: false, xl: false});
@@ -27,10 +28,17 @@ const BettingControls = () => {
     const isPortrait = useOrientation() === 'portrait';
     const isMobile = isMobileWidth && isPortrait;
   console.log("betting controls : " + isMobileWidthName);
+
+  const PlaceBet = ()=>{
+    console.log("Placebet is clicked");
+    // const data =  GameCanvas();
+    // console.log("Placebet is clicked " + data);
+  }
+
   return (
-    <Grid
+    <Flex
       // templateColumns={isMobile ? "1fr" : "1fr 1fr"}
-      templateColumns={{ base: "1fr", sm: "1fr", md: "1fr" , lg: "1fr 1fr", xl: "1fr 1fr"}}
+      // templateColumns={{ base: "1fr", sm: "1fr", md: "1fr" , lg: "1fr 1fr", xl: "1fr 1fr"}}
       // gap={isMobile ? "2" : "4"}
       gap={{ base: 1, sm: 2, md: 2 , lg: 3, xl: 4}}
       bg={"slateblue"}
@@ -41,10 +49,10 @@ const BettingControls = () => {
       borderColor={"yellow.400"}
       borderWidth={2}
       backdropFilter="blur(8px)"
-      alignContent={'center'}
-      alignSelf={'center'}
-      alignItems={'center'}
-
+      justifyContent={'center'}
+      wrap="wrap"
+      align={'center'}
+      direction={{ base: "column", sm: "column", md: "column" , lg: "row", xl: "row"}}
     >
       {/* LEFT SIDE */}
       <Stack spacing={4} >
@@ -94,7 +102,10 @@ const BettingControls = () => {
           <VStack borderWidth={1} gap={2} bgColor={"gray.900"} borderRadius={"md"} borderColor={"gray.700"} alignItems={"center"} alignContent={'center'} alignSelf={'center'} h={'full'}>
           <Heading fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color="gray.100">Collect</Heading>
           <HStack borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"} >
-          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2}> {/* need to add on click*/}
+          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2} onClick={ ()=>{
+            PlaceBet();
+          }
+          }> {/* need to add on click*/}
             <MinusIcon color={"white"}/>
           </Button>
           {/* <Icon as={MinusIcon} color={"white"} borderRadius={"full"} background={"gray.800"} w={7} h={7} fontSize={10}/> */}
@@ -219,7 +230,7 @@ const BettingControls = () => {
          
         </Flex>
       </Stack>
-    </Grid>
+    </Flex>
   );
 };
 
