@@ -29,8 +29,32 @@ const BettingControls = () => {
     const isMobile = isMobileWidth && isPortrait;
   console.log("betting controls : " + isMobileWidthName);
 
-  const PlaceBet = ()=>{
+  const OnPlaceBetClicked = ()=>{
     console.log("Placebet is clicked");
+    // const data =  GameCanvas();
+    // console.log("Placebet is clicked " + data);
+  }
+
+  const OnCancelClicked = ()=>{
+    console.log("Cancel is clicked");
+    // const data =  GameCanvas();
+    // console.log("Placebet is clicked " + data);
+  }
+
+  const OnBetReduceClicked = ()=>{
+    console.log("OnBetReduceClicked is clicked");
+    // const data =  GameCanvas();
+    // console.log("Placebet is clicked " + data);
+  }
+
+  const OnBetIncreaseClicked = ()=>{
+    console.log("OnBetIncreaseClicked is clicked");
+    // const data =  GameCanvas();
+    // console.log("Placebet is clicked " + data);
+  }
+
+  const OnAmountClicked = (value: number)=> {
+    console.log("OnAmountClicked is clicked : " + value);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
   }
@@ -60,7 +84,9 @@ const BettingControls = () => {
           <VStack borderWidth={1} gap={2} bgColor={"gray.900"} borderRadius={"md"} borderColor={"gray.700"} alignItems={"center"} >
           <Heading fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color="gray.100">Bet</Heading>
           <HStack flex={1} borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"}>
-          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "sm" , lg: "md", xl: "md"}} iconSpacing={2}> {/* need to add on click*/}
+          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "sm" , lg: "md", xl: "md"}} iconSpacing={2} onClick={()=>{
+            OnBetReduceClicked();
+          }}> {/* need to add on click*/}
             <MinusIcon color={"white"}/>
           </Button>
           {/* <Icon as={MinusIcon} color={"white"} borderRadius={"full"} background={"gray.800"} w={7} h={7} fontSize={10}/> */}
@@ -79,21 +105,32 @@ const BettingControls = () => {
             fontWeight={"bold"}
           ></Input>
           <Text color="gray.400" fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} fontWeight={"bold"}>USD</Text>
-          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "sm" , lg: "md", xl: "md"}} iconSpacing={2}> {/* need to add on click*/}
+          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "sm" , lg: "md", xl: "md"}} iconSpacing={2} onClick={ ()=>{
+            OnBetIncreaseClicked();
+          }
+          }> {/* need to add on click*/}
             <AddIcon color={"white"} />
           </Button>
           </HStack>
           <Flex gap={{ base: 1, sm: 1, md: 2 , lg: 2, xl: 2}} mt={{ base: 0, sm: 2, md: 2 , lg: 2, xl: 2}} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={0} direction={"row"} paddingBottom={1} alignContent={'center'}>
-            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}}>
+            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
+              OnAmountClicked(1);
+            }}>
               1 $
             </Button>
-            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}}>
+            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
+              OnAmountClicked(5);
+            }}>
               5 $
             </Button>
-            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}}>
+            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
+              OnAmountClicked(10);
+            }}>
               10 $
             </Button>
-            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}}>
+            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
+              OnAmountClicked(100);
+            }}>
               ALL IN
             </Button>
           </Flex>
@@ -103,7 +140,7 @@ const BettingControls = () => {
           <Heading fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color="gray.100">Collect</Heading>
           <HStack borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"} >
           <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2} onClick={ ()=>{
-            PlaceBet();
+            OnBetReduceClicked();
           }
           }> {/* need to add on click*/}
             <MinusIcon color={"white"}/>
@@ -122,7 +159,10 @@ const BettingControls = () => {
             textAlign={"center"}
           ></Input>
           <Text color="gray.400" fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}}>X</Text>
-          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2}> {/* need to add on click*/}
+          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2} onClick={ ()=>{
+            OnBetIncreaseClicked();
+          }
+          }> {/* need to add on click*/}
             <AddIcon color={"white"} />
           </Button>
           
@@ -136,7 +176,10 @@ const BettingControls = () => {
           fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "lg", xl: "lg"}}
           fontWeight="semibold"
           // margin={0}
-        >
+         onClick={ ()=>{
+            OnPlaceBetClicked();
+          }
+          }>
           Place your bet
         </Button>
           </VStack>
@@ -145,12 +188,14 @@ const BettingControls = () => {
       </Stack>
 
       {/* RIGHT SIDE */}
-      <Stack spacing={4} >
+     <Stack spacing={4} >
         <Flex flex={1} align="center" alignSelf={"center"} alignContent={"center"} position={"relative"} gap={2} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} alignItems='center' bgColor={"gray.900"}>
           <VStack borderWidth={1} gap={2} bgColor={"gray.900"} borderRadius={"md"} borderColor={"gray.700"} alignItems={"center"} >
           <Heading fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color="gray.100">Bet</Heading>
           <HStack flex={1} borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"}>
-          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "sm" , lg: "md", xl: "md"}} iconSpacing={2}> {/* need to add on click*/}
+          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "sm" , lg: "md", xl: "md"}} iconSpacing={2} onClick={()=>{
+            OnBetReduceClicked();
+          }}> {/* need to add on click*/}
             <MinusIcon color={"white"}/>
           </Button>
           {/* <Icon as={MinusIcon} color={"white"} borderRadius={"full"} background={"gray.800"} w={7} h={7} fontSize={10}/> */}
@@ -165,25 +210,36 @@ const BettingControls = () => {
             _placeholder={{ color: "gray.400" }}
             focusBorderColor="white"
             textAlign={"center"}
-            fontSize={{ base: "xs", sm: "md", md: "md" , lg: "md", xl: "lg"}}
+            fontSize={{ base: "xs", sm: "md", md: "md" , lg: "md", xl: "md"}}
             fontWeight={"bold"}
           ></Input>
           <Text color="gray.400" fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} fontWeight={"bold"}>USD</Text>
-          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "sm" , lg: "md", xl: "md"}} iconSpacing={2}> {/* need to add on click*/}
+          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "sm" , lg: "md", xl: "md"}} iconSpacing={2} onClick={ ()=>{
+            OnBetIncreaseClicked();
+          }
+          }> {/* need to add on click*/}
             <AddIcon color={"white"} />
           </Button>
           </HStack>
           <Flex gap={{ base: 1, sm: 1, md: 2 , lg: 2, xl: 2}} mt={{ base: 0, sm: 2, md: 2 , lg: 2, xl: 2}} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={0} direction={"row"} paddingBottom={1} alignContent={'center'}>
-            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}}>
+            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
+              OnAmountClicked(1);
+            }}>
               1 $
             </Button>
-            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}}>
+            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
+              OnAmountClicked(5);
+            }}>
               5 $
             </Button>
-            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}}>
+            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
+              OnAmountClicked(10);
+            }}>
               10 $
             </Button>
-            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}}>
+            <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
+              OnAmountClicked(100);
+            }}>
               ALL IN
             </Button>
           </Flex>
@@ -192,7 +248,10 @@ const BettingControls = () => {
           <VStack borderWidth={1} gap={2} bgColor={"gray.900"} borderRadius={"md"} borderColor={"gray.700"} alignItems={"center"} alignContent={'center'} alignSelf={'center'} h={'full'}>
           <Heading fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color="gray.100">Collect</Heading>
           <HStack borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"} >
-          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2}> {/* need to add on click*/}
+          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2} onClick={ ()=>{
+            OnBetReduceClicked();
+          }
+          }> {/* need to add on click*/}
             <MinusIcon color={"white"}/>
           </Button>
           {/* <Icon as={MinusIcon} color={"white"} borderRadius={"full"} background={"gray.800"} w={7} h={7} fontSize={10}/> */}
@@ -209,7 +268,10 @@ const BettingControls = () => {
             textAlign={"center"}
           ></Input>
           <Text color="gray.400" fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}}>X</Text>
-          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2}> {/* need to add on click*/}
+          <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2} onClick={ ()=>{
+            OnBetIncreaseClicked();
+          }
+          }> {/* need to add on click*/}
             <AddIcon color={"white"} />
           </Button>
           
@@ -220,10 +282,13 @@ const BettingControls = () => {
           bg="yellow.500"
           _hover={{ bg: "yellow.600" }}
           color="black"
-          fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "lg", xl: "xl"}}
+          fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "lg", xl: "lg"}}
           fontWeight="semibold"
           // margin={0}
-        >
+         onClick={ ()=>{
+            OnPlaceBetClicked();
+          }
+          }>
           Place your bet
         </Button>
           </VStack>
