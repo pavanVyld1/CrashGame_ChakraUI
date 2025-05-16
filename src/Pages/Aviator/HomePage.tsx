@@ -4,7 +4,7 @@ import  Header from './Header';
 
 import  PlayersList from './PlayerList';
 import  GameCanvas  from './GameCanvas';
-import  BettingControls from './BettingControls';
+import  BettingControlsComponent from './BettingControlsComponent';
 import Game from './Game';
 import GameTestScroll from './GameTestScroll';
 import MriyaGameUI from '../MriyaGameUI';
@@ -89,6 +89,7 @@ export default function HomePage() {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
         // setTimeout(updateDimensions, 0);
+          console.log("Home page Use effect called");
           updateDimensions();
       });
     });
@@ -118,7 +119,7 @@ export default function HomePage() {
             
             {/* <MriyaGameUI /> */}
             <Box order={1} ref={controlsRef}>
-              <BettingControls />
+              <BettingControlsComponent />
             </Box>
             <Box order={0} ref={gamecontainerRef}>
               {dimensions != null && <GameTestScroll width={dimensions.width} height={dimensions.height}/>}
