@@ -10,6 +10,10 @@ import GameTestScroll from './GameTestScroll';
 import MriyaGameUI from '../MriyaGameUI';
 import { useEffect, useRef, useState } from 'react';
 import { useOrientation } from '../../hooks/useOrientation';
+import { SocketProvider } from '../../services/socketContext';
+import TestSocketComponent from '../testSocketComponent';
+// import { SocketProvider } from '../services/SocketContext';
+// import GameComponent from './GameComponent';
 
 // export default function HomePage() {
 //   return (
@@ -36,6 +40,9 @@ import { useOrientation } from '../../hooks/useOrientation';
 
 export default function HomePage() {
   
+
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MmVlNjZiNjZkMmYyYjQ0MzY4NTk4ZiIsImlhdCI6MTc0NzkwNjQwNywiZXhwIjoxNzUwNDk4NDA3fQ.CO_7I0qLFQ2tB8CxY18o2G4KC_w5ymTgeG61tXMzZI4';
+
   const isMobileWidth = useBreakpointValue({ base: true, sm: true, md: false , lg: false, xl: false});
   const isMobileWidthName = useBreakpointValue({ base: "base", sm: "small", md: "md" , lg: "large", xl: "xl"});
   const isPortrait = useOrientation() === 'portrait';
@@ -112,6 +119,9 @@ export default function HomePage() {
         <Header />
       </Box>
       <Flex flex={1} overflow="show" direction={isPortrait ? "column" : undefined} >
+        <SocketProvider token={token}>
+            <TestSocketComponent />
+        </SocketProvider>
         <Box order={isPortrait ? 2 : 0} ref={playerListRef}>
           <PlayersList order={isPortrait ? 2 : 0}/>
         </Box>
