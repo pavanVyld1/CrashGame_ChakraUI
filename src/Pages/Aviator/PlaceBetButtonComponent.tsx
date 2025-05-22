@@ -22,35 +22,25 @@ const PlaceBetButtonComponent = ({ index }: { index: number }) => {
 
     const OnPlaceBetClicked = (buttonIndex:number)=>{
         console.log("Placebet is clicked");
-        if(buttonState != BetButtonState.BetPlaced)
-            setButtonState(BetButtonState.BetPlaced);
-        else
-            setButtonState(BetButtonState.Idle);
-
-            toggleButtonDisplay(placeBetButtonRef);
-            toggleButtonDisplay(cancelButtonRef);
+        
+        setButtonState(BetButtonState.BetPlaced);   
+        toggleButtonDisplay(placeBetButtonRef);
+        toggleButtonDisplay(cancelButtonRef);
     }
 
     const OnCancelClicked = (buttonIndex:number)=>{
         console.log("Placebet is clicked");
-        if(buttonState != BetButtonState.BetPlaced)
-            setButtonState(BetButtonState.BetPlaced);
-        else
-            setButtonState(BetButtonState.Idle);
+        setButtonState(BetButtonState.Idle);
         toggleButtonDisplay(cancelButtonRef);
         toggleButtonDisplay(placeBetButtonRef);
     }
 
     const OnCollectClicked = (buttonIndex:number)=>{
         console.log("Placebet is clicked");
-        if(buttonState != BetButtonState.BetPlaced)
-            setButtonState(BetButtonState.BetPlaced);
-        else
-            setButtonState(BetButtonState.Idle);
-
-            toggleButtonDisplay(collectButtonRef);
-
-        }
+        setButtonState(BetButtonState.Idle);
+        toggleButtonDisplay(collectButtonRef);
+        toggleButtonDisable(collectButtonRef);
+    }
 
     const toggleButtonDisplay = (buttonRef: React.RefObject<HTMLButtonElement>) => {
         if (buttonRef.current) {
@@ -76,6 +66,15 @@ const PlaceBetButtonComponent = ({ index }: { index: number }) => {
             console.log("showButton button ref  : " + buttonRef.current.id);
             console.log("current Display : " + currentDisplay);
             buttonRef.current.style.display = "none";
+        }
+    };
+
+    const toggleButtonDisable = (buttonRef: React.RefObject<HTMLButtonElement>) => {
+        if (buttonRef.current) {
+            const currentDisableState = buttonRef.current.disabled;
+            console.log("showButton button ref  : " + buttonRef.current.id);
+            console.log("current Display : " + currentDisableState);
+            buttonRef.current.disabled = currentDisableState === true ? false : true;
         }
     };
 
@@ -145,16 +144,18 @@ const PlaceBetButtonComponent = ({ index }: { index: number }) => {
 //   },[]);
 
     useEffect(() => {
-    console.log("PlaceBet Button useEffect called");
-    showButton(placeBetButtonRef);
-    hideButton(cancelButtonRef);
-    hideButton(collectButtonRef);
+        console.log("PlaceBet Button useEffect called");
+        //TODO : need to set based on the Game Session data from server
+        showButton(placeBetButtonRef);
+        hideButton(cancelButtonRef);
+        hideButton(collectButtonRef);
     }, []);
 
 
     return(
         <Flex w="full" align={'center'} direction={'column'} gap={2}>
             <Button
+            minW={'full'}
             id="placebet"
             ref={placeBetButtonRef}
             size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}}
@@ -173,6 +174,7 @@ const PlaceBetButtonComponent = ({ index }: { index: number }) => {
         </Button>
          <Button
             id="cancelbet"
+            minW={'full'}
             ref={cancelButtonRef}
             size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}}
             bg={getBgColor()}
@@ -190,6 +192,7 @@ const PlaceBetButtonComponent = ({ index }: { index: number }) => {
         </Button>
         <Button
             id="collectBet"
+            minW={'full'}
             ref={collectButtonRef}
             size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}}
             bg={getBgColor()}

@@ -22,6 +22,7 @@ import { useOrientation } from "../../hooks/useOrientation";
 import GameCanvas from "./GameCanvas";
 import { useState } from "react";
 import PlaceBetButtonComponent from "./PlaceBetButtonComponent";
+import PlaceBetButtonStateComponent from "./PlaceBetButtonBasedOnStates";
 
 const BettingControls = (controlIndex : number) => {
     const isMobileWidth = useBreakpointValue({ base: true, sm: true, md: false , lg: false, xl: false});
