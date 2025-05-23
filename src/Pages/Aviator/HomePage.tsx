@@ -12,6 +12,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useOrientation } from '../../hooks/useOrientation';
 import { SocketProvider } from '../../services/socketContext';
 import TestSocketComponent from '../testSocketComponent';
+import AuthPage from '../Auth/AuthPage';
+import AuthPagerUpdated from '../Auth/AuthPageUpdated';
 // import { SocketProvider } from '../services/SocketContext';
 // import GameComponent from './GameComponent';
 
@@ -118,10 +120,11 @@ export default function HomePage() {
       <Box ref={headerRef}>
         <Header />
       </Box>
+      {/* <AuthPagerUpdated /> */}
       <Flex flex={1} overflow="show" direction={isPortrait ? "column" : undefined} >
-        <SocketProvider token={token}>
+        {/* <SocketProvider token={token}>
             <TestSocketComponent />
-        </SocketProvider>
+        </SocketProvider> */}
         <Box order={isPortrait ? 2 : 0} ref={playerListRef}>
           <PlayersList order={isPortrait ? 2 : 0}/>
         </Box>

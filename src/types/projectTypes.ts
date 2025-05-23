@@ -17,4 +17,13 @@ export const LABELS = {
   WIN_AMOUNT: "Win",
   COLLECT: "Collect",
   NO_DATA: "No data available",
+  LOGIN : "Login",
+  NAME : "Name",
+  EMAIL : "Email Address",
+  REGISTER : "REGISTER",
+  LOGOUT: "Log Out",
+  SIGN_IN_HEADER : "Sign in to your account",
+  SIGN_UP_HEADER : "Create an account",
+  PASSWORD : "Password",
+
 };
