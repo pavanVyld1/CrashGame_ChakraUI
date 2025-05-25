@@ -12,6 +12,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useOrientation } from '../../hooks/useOrientation';
 import AuthPage from '../Auth/AuthPage';
 import AuthPagerUpdated from '../Auth/AuthPageUpdated';
+import { useNavigate } from 'react-router-dom';
+import socketService from '../../services/socketService';
+import { GameConstants } from '../../types/projectTypes';
+import { API_CONSTANTS } from '../../types/dataConstants';
+import SocketManager from '../Managers/SocketManager';
 // import GameComponent from './GameComponent';
 
 // export default function HomePage() {
@@ -53,6 +58,8 @@ export default function HomePage() {
   const playerListRef = useRef<HTMLDivElement>(null);
   const homePageref = useRef<HTMLDivElement>(null);
 
+  const navigate = useNavigate();
+
   console.log("Width Name : "+ isMobileWidthName);
   const [readyToRenderGame, setReadyToRenderGame] = useState(false);
 
@@ -60,7 +67,6 @@ export default function HomePage() {
 
     const updateDimensions = () => {
     if (!gamecontainerRef.current || !controlsRef.current || !playerListRef.current || !homePageref.current || !headerRef.current) return;
-    
     
     const containerRect = gamecontainerRef.current.getBoundingClientRect();
     const controlsRect = controlsRef.current.getBoundingClientRect();
@@ -92,15 +98,51 @@ export default function HomePage() {
   };
 
     useEffect(() => {
-      requestAnimationFrame(() => {
+      let token = localStorage.getItem("token");
+      console.log("Home Page Trying to Connect");
+      if(token){
         requestAnimationFrame(() => {
-        // setTimeout(updateDimensions, 0);
-          console.log("Home page Use effect called");
-          updateDimensions();
+          requestAnimationFrame(() => {
+          // setTimeout(updateDimensions, 0);
+            console.log("Home page Use effect called");
+            updateDimensions();
+            if(token){
+              SocketManager.onSessionStart((data) => {
+              console.log("Session started:", data);
+            });
+
+            SocketManager.onSessionInfo((data) => {
+              console.log("Session Info:", data);
+            });
+
+            SocketManager.onBetPlaced((data) => {
+              console.log("Bet Placed:", data);
+            });
+
+            SocketManager.onCrash((data) => {
+              console.log("Crash :", data);
+            });
+
+            SocketManager.onTick((tick) => {
+              console.log("Tick:", tick.value);
+            });
+
+            SocketManager.onSessionState((data) => {
+              console.log("SessionState:", data);
+            });
+
+            SocketManager.initSocket(token.toString(), API_CONSTANTS.SOCKET_URL);
+
+            }
+        });
       });
-    });
+    } else {
+      // socketService.disconnect();
+      navigate('/');
+    }
     // window.addEventListener("resize", updateDimensions);
     return () => {
+      SocketManager.disconnect();
       // window.removeEventListener("resize", updateDimensions);
     }
   },[]);

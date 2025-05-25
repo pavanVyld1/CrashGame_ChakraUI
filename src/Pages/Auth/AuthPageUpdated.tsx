@@ -3,11 +3,14 @@ import {
   Box, Button, Flex, FormControl, FormLabel, Heading, Input,
   Stack, useColorModeValue, useToast
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ApiService from '../../services/ApiService';
 import { RegisterData , LoginData } from '../../services/ApiService';
 import { useNavigate } from 'react-router-dom';
 import { LABELS } from '../../types/projectTypes';
+import socketService from '../../services/socketService';
+import { Console } from 'console';
+import SocketManager from '../Managers/SocketManager';
 
 const AuthPagerUpdated: React.FC = () => {
   const navigate = useNavigate();
@@ -62,6 +65,16 @@ const AuthPagerUpdated: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+        console.log("Auth Page Loaded : Disconnect the socket");
+        SocketManager.disconnect();
+      // window.addEventListener("resize", updateDimensions);
+      return () => {
+        // window.removeEventListener("resize", updateDimensions);
+      }
+    },[]);
+
 
   return (
     <Flex minH="100vh" align="center" justify="center" bg={useColorModeValue("gray.50", "gray.800")}>

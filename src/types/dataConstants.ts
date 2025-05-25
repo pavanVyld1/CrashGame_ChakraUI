@@ -6,5 +6,6 @@ export const API_CONSTANTS = {
   ADD : 'wallet/add',
   USE :'wallet/use',
   PROFILE : 'user/profile',
-  FEEDBACK : 'feedback/add'
+  FEEDBACK : 'feedback/add',
+  SOCKET_URL : 'http://3.108.122.141'
 };

@@ -3,6 +3,8 @@ import { io, Socket } from "socket.io-client";
 
 export type GameState = 'waiting' | 'starting' | 'started' | 'crashed';
 
+type GameEventCallback = (...args: any[]) => void;
+
 export interface SessionStartData {
   sessionId: string;
   maxCrashValue: number;
@@ -34,6 +36,8 @@ class SocketService {
   private socket: Socket | null = null;
   private token: string = "";
 
+  private callbacks: Map<string, GameEventCallback[]> = new Map();
+
   private constructor() {}
 
   static getInstance(): SocketService {
@@ -43,17 +47,25 @@ class SocketService {
     return SocketService.instance;
   }
 
-  connect(token: string, url: string = "http://3.108.122.141") {
+  connect(token: string, url: string = "ws://3.108.122.141") {
+    if (this.socket) return;
+
     this.token = token;
     this.socket = io(url, {
       auth: { token },
+      transports: ['websocket']
     });
-
+    console.log("Socket connecting ");
     this.socket.on("connect", () => console.log(`✅ Connected: ${this.socket?.id}`));
     this.socket.on("error", (msg) => console.error(`⚠️ Socket error: ${msg}`));
+    this.socket.on("disconnect", (reason) => {
+      console.warn("Socket disconnected:", reason);
+    // You can trigger a callback or an event emitter here if needed
+    });
   }
 
   onSessionStart(callback: (data: SessionStartData) => void) {
+    console.log("Socket Service : OnSessionStart");
     this.socket?.on("session_start", callback);
   }
 
@@ -101,8 +113,11 @@ class SocketService {
   }
 
   disconnect() {
-    this.socket?.disconnect();
-    this.socket = null;
+    if(this.socket){
+      console.log("Disconnecting..");
+      this.socket?.disconnect();
+      this.socket = null;
+    }
   }
 
   isConnected(): boolean {
