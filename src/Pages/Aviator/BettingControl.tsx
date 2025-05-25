@@ -1,20 +1,4 @@
-// // src/components/BettingControls.tsx
-// import { Box, Button, HStack, NumberInput, NumberInputField } from '@chakra-ui/react';
-
-// const BettingControls = () => {
-//   return (
-//     <HStack p="4" bg="gray.900" spacing="4" justify="center">
-//       <NumberInput maxW="100px" defaultValue={10}>
-//         <NumberInputField />
-//       </NumberInput>
-//       <Button colorScheme="green" size="lg">Bet</Button>
-//     </HStack>
-//   );
-// };
-
-// export default BettingControls;
-
-import { Button, Input, Box, Grid, Stack, Text, Flex,useBreakpointValue, color, HStack, Icon, Center, VStack, Heading } from "@chakra-ui/react";
+import { Button, Input, Box, Grid, Stack, Text, Flex,useBreakpointValue, color, HStack, Icon, Center, VStack, Heading, Switch } from "@chakra-ui/react";
 import { MinusIcon, AddIcon } from "@chakra-ui/icons";
 import { FaBold } from "react-icons/fa";
 import Header from "./Header";
@@ -23,8 +7,9 @@ import GameCanvas from "./GameCanvas";
 import { useState } from "react";
 import PlaceBetButtonComponent from "./PlaceBetButtonComponent";
 import PlaceBetButtonStateComponent from "./PlaceBetButtonBasedOnStates";
-
-const BettingControls = (controlIndex : number) => {
+import { DataService } from "../../services/dataService";
+import { GameConstants, LABELS } from "../../types/projectTypes";
+const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
     const isMobileWidth = useBreakpointValue({ base: true, sm: true, md: false , lg: false, xl: false});
     const isMobileWidthName = useBreakpointValue({ base: "base", sm: "small", md: "md" , lg: "large", xl: "xl"});
 
@@ -33,7 +18,14 @@ const BettingControls = (controlIndex : number) => {
 
     const [isBetPlaced, SetBetPlaced] = useState(false);
 
-  console.log("betting controls : " + isMobileWidthName);
+    console.log("betting controls : " + isMobileWidthName);
+    // const [betAmount, setBetAmount] = useState<number>(1.0);
+    // const [betMultiplier, setBetMultiplier] = useState<number>(1.0);
+    // const [isAutoBetChecked, setAutoBet] = useState(false);
+    // const [isAutoCashOutChecked, setAutoCashOut] = useState(false);
+    let betAmount = 1.0;
+    let betMultiplier = 1.0;
+    const dataService = DataService.getInstance();
 
   const OnPlaceBetClicked = (buttonIndex:number)=>{
     console.log("Placebet is clicked");
@@ -50,12 +42,25 @@ const BettingControls = (controlIndex : number) => {
 
   const OnBetReduceClicked = ()=>{
     console.log("OnBetReduceClicked is clicked");
+    if(betAmount <= GameConstants.MIN_BET)
+      return;
+
+    // setBetAmount(betAmount - GameConstants.BET_INCREMENTOR);
+    betAmount = betAmount - GameConstants.BET_INCREMENTOR;
+    dataService.updateBetAmount(controlIndex,betAmount);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
   }
 
   const OnBetIncreaseClicked = ()=>{
     console.log("OnBetIncreaseClicked is clicked");
+
+    if(betAmount >= dataService.getMaxBetValue())
+      return;
+
+    // setBetAmount(betAmount + GameConstants.BET_INCREMENTOR);
+    betAmount = betAmount + GameConstants.BET_INCREMENTOR
+    dataService.updateBetAmount(controlIndex,betAmount);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
   }
@@ -64,13 +69,64 @@ const BettingControls = (controlIndex : number) => {
     console.log("OnAmountClicked is clicked : " + value);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
+    if(value > dataService.getMaxBetValue())
+      return;
+    // setBetAmount(value);
+    betAmount = value;
+    console.log("Bet Test amount set : " + betAmount);
+    dataService.updateBetAmount(controlIndex,betAmount);
+  }
+
+  const OnSetMultiplier = (value: number)=> {
+    console.log("OnAmountClicked is clicked : " + value);
+    // const data =  GameCanvas();
+    // console.log("Placebet is clicked " + data);
+    if(value > dataService.getMaxMultiplierValue())
+      return;
+    // setBetMultiplier(value);
+    betMultiplier = value;
+    dataService.updateMultiplier(controlIndex,betMultiplier);
+  }
+
+  const OnMultiplierReduceClicked = ()=>{
+    console.log("OnBetReduceClicked is clicked");
+    if(betMultiplier <= GameConstants.MIN_MULTIPLIER)
+      return;
+
+    // setBetMultiplier(betMultiplier - GameConstants.MULTIPLIER_INCREMENTOR);
+    betMultiplier = betMultiplier - GameConstants.MULTIPLIER_INCREMENTOR
+    dataService.updateMultiplier(controlIndex,betMultiplier);
+    // const data =  GameCanvas();
+    // console.log("Placebet is clicked " + data);
+  }
+
+  const OnMultiplierIncreaseClicked = ()=>{
+    console.log("OnBetIncreaseClicked is clicked");
+
+    if(betMultiplier >= dataService.getMaxMultiplierValue())
+      return;
+
+    // setBetMultiplier(betMultiplier + GameConstants.MULTIPLIER_INCREMENTOR);
+    betMultiplier = betMultiplier + GameConstants.MULTIPLIER_INCREMENTOR
+    
+    dataService.updateMultiplier(controlIndex,betMultiplier);
+    // const data =  GameCanvas();
+    // console.log("Placebet is clicked " + data);
   }
 
   return (
     <Stack spacing={4} >
         <Flex flex={1} align="center" alignSelf={"center"} alignContent={"center"} position={"relative"} gap={2} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={2} alignItems='center' bgColor={"gray.900"}>
-          <VStack borderWidth={1} gap={2} bgColor={"gray.900"} borderRadius={"md"} borderColor={"gray.700"} alignItems={"center"} >
-          <Heading fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color="gray.100">Bet</Heading>
+          <VStack borderWidth={1} gap={1.5} bgColor={"gray.900"} borderRadius={"md"} borderColor={"gray.700"} alignItems={"center"} >
+          <Flex w="100%" align="center" justify="space-between" px={2}>
+            <Flex flex="1" justify="center">
+              <Heading fontSize={{ base: "xs", sm: "sm", md: "md", lg: "md", xl: "md" }} color="gray.100">{LABELS.BET}</Heading>
+            </Flex>
+              {/* <Switch size={{ base: "xs", sm: "sm", md: "md", lg: "md", xl: "md" }} colorScheme="green" 
+                isChecked={isAutoBetChecked}
+                onChange={() => setAutoBet(!isAutoBetChecked)}
+              /> */}
+          </Flex>
           <HStack flex={1} borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"}>
           <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "sm" , lg: "md", xl: "md"}} iconSpacing={2} onClick={()=>{
             OnBetReduceClicked();
@@ -81,6 +137,11 @@ const BettingControls = (controlIndex : number) => {
           <Input
             type="number"
             defaultValue="1.00"
+            value={betAmount.toFixed(2)}
+            onChange={(e) => {
+              const value = Math.round(parseFloat(e.target.value) * 100) / 100;
+              OnAmountClicked(value);
+            }}
             // w={100}
             // w={{ base: "16", sm: "16", md: "100" , lg: "100", xl: "100"}}
             w={{ base: 75, sm: 75, md: 100 , lg: 100, xl: 100}}
@@ -102,33 +163,41 @@ const BettingControls = (controlIndex : number) => {
           </HStack>
           <Flex gap={{ base: 1, sm: 1, md: 2 , lg: 2, xl: 2}} mt={{ base: 0, sm: 2, md: 2 , lg: 2, xl: 2}} borderTop="1px solid" borderColor={"yellow.400"} borderWidth={0} direction={"row"} paddingBottom={1} alignContent={'center'}>
             <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
-              OnAmountClicked(1);
+              OnAmountClicked(GameConstants.ONE);
             }}>
-              1 $
+              {GameConstants.ONE + "$"}
             </Button>
             <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
-              OnAmountClicked(5);
+              OnAmountClicked(GameConstants.FIVE);
             }}>
-              5 $
+              {GameConstants.FIVE + "$"}
             </Button>
             <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
-              OnAmountClicked(10);
+              OnAmountClicked(GameConstants.TEN);
             }}>
-              10 $
+              {GameConstants.TEN + "$"}
             </Button>
             <Button variant="outline" size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color={"blue.100"} fontWeight={"bold"} fontSize={{ base: "xs", sm: "sm", md: "sm" , lg: "sm", xl: "sm"}} onClick={()=>{
-              OnAmountClicked(100);
+              OnAmountClicked(GameConstants.ALLIN);
             }}>
-              ALL IN
+              {GameConstants.ALLIN+ "$"}
             </Button>
           </Flex>
           </VStack>
 
           <VStack borderWidth={1} gap={2} bgColor={"gray.900"} borderRadius={"md"} borderColor={"gray.700"} alignItems={"center"} alignContent={'center'} alignSelf={'center'} h={'full'}>
-          <Heading fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} color="gray.100">Collect</Heading>
+          <Flex w="100%" align="center" justify="space-between" px={2}>
+            <Flex flex="1" justify="center">
+              <Heading fontSize={{ base: "xs", sm: "sm", md: "md", lg: "md", xl: "md" }} color="gray.100">{LABELS.COLLECT}</Heading>
+            </Flex>
+              {/* <Switch size={{ base: "xs", sm: "sm", md: "md", lg: "md", xl: "md" }} colorScheme="green" 
+                isChecked={isAutoCashOutChecked}
+                onChange={() => setAutoCashOut(!isAutoCashOutChecked)}
+              /> */}
+          </Flex>
           <HStack borderWidth={1} gap={1} bgColor={"gray.700"} borderRadius={"full"} borderColor={"gray.900"} >
           <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2} onClick={ ()=>{
-            OnBetReduceClicked();
+            OnMultiplierReduceClicked();
           }
           }> {/* need to add on click*/}
             <MinusIcon color={"white"}/>
@@ -137,6 +206,11 @@ const BettingControls = (controlIndex : number) => {
           <Input
             type={"number"}
             defaultValue="1.30"
+            value={betMultiplier.toFixed(2)}
+            onChange={(e) => {
+              const value = Math.round(parseFloat(e.target.value) * 100) / 100;
+              OnSetMultiplier(value);
+            }}
             w={{ base: 75, sm: 75, md: 100 , lg: 100, xl: 100}}
             maxWidth={100}
             bg="gray.700"
@@ -148,14 +222,14 @@ const BettingControls = (controlIndex : number) => {
           ></Input>
           <Text color="gray.400" fontSize={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}}>X</Text>
           <Button background={"gray.700"} variant={"solid"} rounded={"full"} size={{ base: "xs", sm: "sm", md: "md" , lg: "md", xl: "md"}} iconSpacing={2} onClick={ ()=>{
-            OnBetIncreaseClicked();
+            OnMultiplierIncreaseClicked();
           }
           }> {/* need to add on click*/}
             <AddIcon color={"white"} />
           </Button>
           
           </HStack>
-          <PlaceBetButtonComponent index = {controlIndex}/>
+          <PlaceBetButtonStateComponent index = {controlIndex}/>
           </VStack>
          
         </Flex>

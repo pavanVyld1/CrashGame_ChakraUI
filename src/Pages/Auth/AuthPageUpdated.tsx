@@ -4,7 +4,7 @@ import {
   Stack, useColorModeValue, useToast
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import apiService from '../../services/ApiService';
+import { ApiService } from '../../services/ApiService';
 import { RegisterData , LoginData } from '../../services/ApiService';
 import { useNavigate } from 'react-router-dom';
 import { LABELS } from '../../types/projectTypes';
@@ -16,6 +16,8 @@ const AuthPagerUpdated: React.FC = () => {
   const [loginForm, setLoginForm] = useState<LoginData>({ email: '', password: '' });
   const [registerForm, setRegisterForm] = useState<RegisterData>({ name: '', email: '', password: '' });
   const toast = useToast();
+
+  const apiService = ApiService.getInstance();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,7 +55,7 @@ const AuthPagerUpdated: React.FC = () => {
     } catch (err: any) {
       toast({
         title: 'Authentication failed',
-        description: err?.response?.data?.message || 'Something went wrong',
+        description: err?.response?.message || 'Something went wrong',
         status: 'error',
         duration: 3000,
         isClosable: true,

@@ -2,13 +2,23 @@
 import { Button, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BetButtonState, LABELS } from "../../types/projectTypes";
+import { DataService } from "../../services/dataService";
+import { ApiService , BetData, CashoutData } from '../../services/ApiService';
 
 const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
   const [buttonState, setButtonState] = useState<BetButtonState>(BetButtonState.Idle);
   const [showPlaceBet, setShowPlaceBet] = useState(true);
   const [showCancelBet, setShowCancelBet] = useState(false);
   const [showCollect, setShowCollect] = useState(false);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const amount = 100;
+
+  const dataService = DataService.getInstance();
+  const apiService = ApiService.getInstance();
+  
+  const token = localStorage.getItem("token");
 
   const getBgColor = () => {
     switch (buttonState) {
@@ -38,6 +48,8 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
     setShowPlaceBet(false);
     setShowCancelBet(true);
     setShowCollect(false);
+
+    //Trigger Bet placed with the API
   };
 
   const OnCancelClicked = () => {
@@ -46,6 +58,8 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
     setShowPlaceBet(true);
     setShowCancelBet(false);
     setShowCollect(false);
+
+    //Trigger Cancel placed with the API
   };
 
   const OnCollectClicked = () => {
@@ -54,6 +68,140 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
     setShowPlaceBet(true);
     setShowCancelBet(false);
     setShowCollect(false);
+
+    //Trigger Bet Collect with the API
+  };
+
+  const handlePlaceBet = async () => {
+    if (!token) {
+      toast({
+        title: 'Error',
+        description: 'User not logged in',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    OnPlaceBetClicked();
+    let bettingData = dataService.getBetData(index); 
+
+    const betData: BetData = {
+      id: index, // example ID
+      amount: bettingData?.amount,
+      sessionId: 'session_123', // replace with actual session ID logic
+    };
+
+    try {
+      setIsLoading(true);
+      const response = await apiService.placeBet(betData, token);
+
+      toast({
+        title: response.success ? 'Bet Placed' : 'Bet Failed',
+        description: response.message,
+        status: response.success ? 'success' : 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (err: any) {
+      toast({
+        title: 'API Error',
+        description: err.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCancelBet = async () => {
+    if (!token) {
+      toast({
+        title: 'Error',
+        description: 'User not logged in',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    OnCancelClicked();
+    let bettingData = dataService.getBetData(index); 
+
+    const betData: BetData = {
+      id: index, // example ID
+      amount: bettingData?.amount,
+      sessionId: 'session_123', // replace with actual session ID logic
+    };
+
+    try {
+      setIsLoading(true);
+      const response = await apiService.cancelBet(betData, token);
+
+      toast({
+        title: response.success ? 'Bet Canceled' : 'Cancel Failed',
+        description: response.message,
+        status: response.success ? 'success' : 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (err: any) {
+      toast({
+        title: 'API Error',
+        description: err.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCollectBet = async () => {
+    if (!token) {
+      toast({
+        title: 'Error',
+        description: 'User not logged in',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    OnCollectClicked();
+    let bettingData = dataService.getBetData(index); 
+
+    const betData: CashoutData = {
+      id: index, // example ID
+      amount: bettingData?.amount,
+      sessionId: 'session_123', // replace with actual session ID logic
+    };
+
+    try {
+      setIsLoading(true);
+      const response = await apiService.cashout(betData, token);
+
+      toast({
+        title: response.success ? 'Bet Placed' : 'Bet Failed',
+        description: response.message,
+        status: response.success ? 'success' : 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (err: any) {
+      toast({
+        title: 'API Error',
+        description: err.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -73,7 +221,8 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
           _hover={{ bg: getBgHoverColor() }}
           color="black"
           fontWeight="semibold"
-          onClick={OnPlaceBetClicked}
+          isLoading={isLoading}
+          onClick={handlePlaceBet}
         >
           {LABELS.PLACE_BET}
         </Button>
@@ -87,7 +236,8 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
           _hover={{ bg: getBgHoverColor() }}
           color="black"
           fontWeight="semibold"
-          onClick={OnCancelClicked}
+          isLoading={isLoading}
+          onClick={handleCancelBet}
         >
           {LABELS.CANCEL_BET}
         </Button>
@@ -101,7 +251,8 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
           _hover={{ bg: getBgHoverColor() }}
           color="black"
           fontWeight="semibold"
-          onClick={OnCollectClicked}
+          isLoading={isLoading}
+          onClick={handleCollectBet}
         >
           {`${amount} $ - ${LABELS.COLLECT}`}
         </Button>
@@ -111,3 +262,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
 };
 
 export default PlaceBetButtonStateComponent;
+function toast(arg0: { title: string; description: string; status: string; duration: number; isClosable: boolean; }) {
+  throw new Error("Function not implemented.");
+}
+

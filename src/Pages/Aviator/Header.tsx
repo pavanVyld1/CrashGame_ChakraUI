@@ -40,7 +40,7 @@ const Header = () => {
 
   return (
     <Flex justify="space-between" align="center" p="4" bg="gray.900" borderBottom="1px solid #2d3748">
-      <Text fontSize="xl" fontWeight="bold" color="red.400">Aviator</Text>
+      <Text fontSize="xl" fontWeight="bold" color="red.400">{LABELS.GAME_LABEL}</Text>
       <Flex align={"end"} gap={4}>
         <Text fontWeight="bold" color="green.300">{formatINR(wallet)} INR</Text>
           <Button

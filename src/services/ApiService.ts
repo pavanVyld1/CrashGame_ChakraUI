@@ -1,5 +1,5 @@
 // src/services/ApiService.ts
-import { DATACONSTANTS } from "../types/dataConstants";
+import { API_CONSTANTS } from "../types/dataConstants";
 
 export interface RegisterData {
   name: string;
@@ -40,7 +40,8 @@ export interface PlayerData {
 }
 
 export interface BetData {
-  amount: number;
+  id: number;
+  amount?: number;
   sessionId: string;
 }
 
@@ -50,16 +51,34 @@ export interface BetResponse {
   sessionId?: string;
 }
 
-export interface CashoutResponse {
-  multiplier: number;
-  payout: number;
+export interface CashoutData {
+  id: number;
+  amount?: number;
+  sessionId: string;
 }
 
-class ApiService {
-  private baseUrl: string;
+export interface CashoutResponse {
+  id: number;
+  multiplier: number;
+  payout: number;
 
-  constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
+  success: boolean;
+  message: string;
+  sessionId?: string;
+}
+
+export class ApiService {
+    private baseUrl: string;
+    private static instance: ApiService;
+    private constructor(baseUrl: string) {
+        this.baseUrl = baseUrl;
+    }
+
+  public static getInstance(): ApiService {
+    if (!ApiService.instance) {
+      ApiService.instance = new ApiService(API_CONSTANTS.BASEURL);
+    }
+    return ApiService.instance;
   }
 
   private async request<T>(
@@ -92,32 +111,36 @@ class ApiService {
 
   // ✅ Register
   register(data: RegisterData) {
-    return this.request<LoginResponse>(DATACONSTANTS.REGISTER, 'POST', data);
+    return this.request<LoginResponse>(API_CONSTANTS.REGISTER, 'POST', data);
   }
 
   // ✅ Login
   login(data: LoginData) {
-    return this.request<LoginResponse>(DATACONSTANTS.LOGIN, 'POST', data);
+    return this.request<LoginResponse>(API_CONSTANTS.LOGIN, 'POST', data);
   }
 
   // ✅ Get Player Data
   getPlayerData(token: string) {
-    return this.request<PlayerData>(DATACONSTANTS.PROFILE, 'GET', undefined, token);
+    return this.request<PlayerData>(API_CONSTANTS.PROFILE, 'GET', undefined, token);
   }
 
   // ✅ Place Bet
   placeBet(data: BetData, token: string) {
-    return this.request<BetResponse>(DATACONSTANTS.USE, 'POST', data, token);
+    return this.request<BetResponse>(API_CONSTANTS.USE, 'POST', data, token);
+  }
+
+  cancelBet(data: BetData, token: string) {
+    return this.request<BetResponse>(API_CONSTANTS.ADD, 'POST', data, token);
   }
 
   // ✅ Cashout
-  cashout(token: string) {
+  cashout(data: CashoutData, token: string) {
     return this.request<CashoutResponse>('/game/cashout', 'POST', {}, token);
   }
 
   logout(data: LoginData) {
-    return this.request<LoginResponse>(DATACONSTANTS.LOGIN, 'POST', data);
+    return this.request<LoginResponse>(API_CONSTANTS.LOGIN, 'POST', data);
   }
 }
 
-export default new ApiService(DATACONSTANTS.BASEURL);
+// export default new ApiService(API_CONSTANTS.BASEURL);

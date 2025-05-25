@@ -65,11 +65,11 @@ const GameTestScroll: React.FC<{ width: number; height: number }> = ({ width, he
 
     // // updateWidth(); // Initial run
     updateDimensions(); // Initial run
-    window.addEventListener("resize", updateDimensions);
+    // window.addEventListener("resize", updateDimensions);
     console.log("Calculated and Passed height : " + height +" Width : " + width);
     setDimensions({ width, height });
     return () => {
-      window.removeEventListener("resize", updateDimensions);
+      // window.removeEventListener("resize", updateDimensions);
     };
   },[])
 

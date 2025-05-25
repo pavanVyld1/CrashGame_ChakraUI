@@ -1,4 +1,4 @@
-export const DATACONSTANTS = {
+export const API_CONSTANTS = {
   BASEURL: 'http://3.108.122.141/api/v1/',
   REGISTER : 'auth/register',
   LOGIN : 'auth/login',
