@@ -22,7 +22,7 @@ export interface BetData {
   autoCashout: boolean;
 }
 
-export class DataService {
+class DataService {
   private static instance: DataService;
 
   private playerData: PlayerData | null = null;
@@ -130,3 +130,5 @@ export class DataService {
     // return this.maxMultiplier;
   }
 }
+
+export default DataService.getInstance();

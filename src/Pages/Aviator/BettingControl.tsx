@@ -7,7 +7,7 @@ import GameCanvas from "./GameCanvas";
 import { useState } from "react";
 import PlaceBetButtonComponent from "./PlaceBetButtonComponent";
 import PlaceBetButtonStateComponent from "./PlaceBetButtonBasedOnStates";
-import { DataService } from "../../services/dataService";
+import DataService from "../../services/dataService";
 import { GameConstants, LABELS } from "../../types/projectTypes";
 const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
     const isMobileWidth = useBreakpointValue({ base: true, sm: true, md: false , lg: false, xl: false});
@@ -25,7 +25,6 @@ const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
     // const [isAutoCashOutChecked, setAutoCashOut] = useState(false);
     let betAmount = 1.0;
     let betMultiplier = 1.0;
-    const dataService = DataService.getInstance();
 
   const OnPlaceBetClicked = (buttonIndex:number)=>{
     console.log("Placebet is clicked");
@@ -47,7 +46,7 @@ const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
 
     // setBetAmount(betAmount - GameConstants.BET_INCREMENTOR);
     betAmount = betAmount - GameConstants.BET_INCREMENTOR;
-    dataService.updateBetAmount(controlIndex,betAmount);
+    DataService.updateBetAmount(controlIndex,betAmount);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
   }
@@ -55,12 +54,12 @@ const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
   const OnBetIncreaseClicked = ()=>{
     console.log("OnBetIncreaseClicked is clicked");
 
-    if(betAmount >= dataService.getMaxBetValue())
+    if(betAmount >= DataService.getMaxBetValue())
       return;
 
     // setBetAmount(betAmount + GameConstants.BET_INCREMENTOR);
     betAmount = betAmount + GameConstants.BET_INCREMENTOR
-    dataService.updateBetAmount(controlIndex,betAmount);
+    DataService.updateBetAmount(controlIndex,betAmount);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
   }
@@ -69,23 +68,23 @@ const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
     console.log("OnAmountClicked is clicked : " + value);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
-    if(value > dataService.getMaxBetValue())
+    if(value > DataService.getMaxBetValue())
       return;
     // setBetAmount(value);
     betAmount = value;
     console.log("Bet Test amount set : " + betAmount);
-    dataService.updateBetAmount(controlIndex,betAmount);
+    DataService.updateBetAmount(controlIndex,betAmount);
   }
 
   const OnSetMultiplier = (value: number)=> {
     console.log("OnAmountClicked is clicked : " + value);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
-    if(value > dataService.getMaxMultiplierValue())
+    if(value > DataService.getMaxMultiplierValue())
       return;
     // setBetMultiplier(value);
     betMultiplier = value;
-    dataService.updateMultiplier(controlIndex,betMultiplier);
+    DataService.updateMultiplier(controlIndex,betMultiplier);
   }
 
   const OnMultiplierReduceClicked = ()=>{
@@ -95,7 +94,7 @@ const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
 
     // setBetMultiplier(betMultiplier - GameConstants.MULTIPLIER_INCREMENTOR);
     betMultiplier = betMultiplier - GameConstants.MULTIPLIER_INCREMENTOR
-    dataService.updateMultiplier(controlIndex,betMultiplier);
+    DataService.updateMultiplier(controlIndex,betMultiplier);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
   }
@@ -103,13 +102,13 @@ const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
   const OnMultiplierIncreaseClicked = ()=>{
     console.log("OnBetIncreaseClicked is clicked");
 
-    if(betMultiplier >= dataService.getMaxMultiplierValue())
+    if(betMultiplier >= DataService.getMaxMultiplierValue())
       return;
 
     // setBetMultiplier(betMultiplier + GameConstants.MULTIPLIER_INCREMENTOR);
     betMultiplier = betMultiplier + GameConstants.MULTIPLIER_INCREMENTOR
     
-    dataService.updateMultiplier(controlIndex,betMultiplier);
+    DataService.updateMultiplier(controlIndex,betMultiplier);
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
   }

@@ -4,7 +4,7 @@ import {
   Stack, useColorModeValue, useToast
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { ApiService } from '../../services/ApiService';
+import ApiService from '../../services/ApiService';
 import { RegisterData , LoginData } from '../../services/ApiService';
 import { useNavigate } from 'react-router-dom';
 import { LABELS } from '../../types/projectTypes';
@@ -16,8 +16,6 @@ const AuthPagerUpdated: React.FC = () => {
   const [loginForm, setLoginForm] = useState<LoginData>({ email: '', password: '' });
   const [registerForm, setRegisterForm] = useState<RegisterData>({ name: '', email: '', password: '' });
   const toast = useToast();
-
-  const apiService = ApiService.getInstance();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,8 +34,8 @@ const AuthPagerUpdated: React.FC = () => {
 
     try {
       const data = isLogin
-        ? await apiService.login(loginForm)
-        : await apiService.register(registerForm);
+        ? await ApiService.login(loginForm)
+        : await ApiService.register(registerForm);
 
       // Save profile and token
       localStorage.setItem('token', data.data.token);

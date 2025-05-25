@@ -2,8 +2,8 @@
 import { Button, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BetButtonState, LABELS } from "../../types/projectTypes";
-import { DataService } from "../../services/dataService";
-import { ApiService , BetData, CashoutData } from '../../services/ApiService';
+import DataService  from "../../services/dataService";
+import ApiService , { BetData, CashoutData } from '../../services/ApiService';
 
 const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
   const [buttonState, setButtonState] = useState<BetButtonState>(BetButtonState.Idle);
@@ -14,9 +14,6 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const amount = 100;
-
-  const dataService = DataService.getInstance();
-  const apiService = ApiService.getInstance();
   
   const token = localStorage.getItem("token");
 
@@ -84,7 +81,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
       return;
     }
     OnPlaceBetClicked();
-    let bettingData = dataService.getBetData(index); 
+    let bettingData = DataService.getBetData(index); 
 
     const betData: BetData = {
       id: index, // example ID
@@ -94,7 +91,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
 
     try {
       setIsLoading(true);
-      const response = await apiService.placeBet(betData, token);
+      const response = await ApiService.placeBet(betData, token);
 
       toast({
         title: response.success ? 'Bet Placed' : 'Bet Failed',
@@ -128,7 +125,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
       return;
     }
     OnCancelClicked();
-    let bettingData = dataService.getBetData(index); 
+    let bettingData = DataService.getBetData(index); 
 
     const betData: BetData = {
       id: index, // example ID
@@ -138,7 +135,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
 
     try {
       setIsLoading(true);
-      const response = await apiService.cancelBet(betData, token);
+      const response = await ApiService.cancelBet(betData, token);
 
       toast({
         title: response.success ? 'Bet Canceled' : 'Cancel Failed',
@@ -172,7 +169,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
       return;
     }
     OnCollectClicked();
-    let bettingData = dataService.getBetData(index); 
+    let bettingData = DataService.getBetData(index); 
 
     const betData: CashoutData = {
       id: index, // example ID
@@ -182,7 +179,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
 
     try {
       setIsLoading(true);
-      const response = await apiService.cashout(betData, token);
+      const response = await ApiService.cashout(betData, token);
 
       toast({
         title: response.success ? 'Bet Placed' : 'Bet Failed',

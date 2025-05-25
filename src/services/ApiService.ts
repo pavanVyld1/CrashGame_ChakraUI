@@ -67,7 +67,7 @@ export interface CashoutResponse {
   sessionId?: string;
 }
 
-export class ApiService {
+class ApiService {
     private baseUrl: string;
     private static instance: ApiService;
     private constructor(baseUrl: string) {
@@ -143,4 +143,4 @@ export class ApiService {
   }
 }
 
-// export default new ApiService(API_CONSTANTS.BASEURL);
+export default ApiService.getInstance();
