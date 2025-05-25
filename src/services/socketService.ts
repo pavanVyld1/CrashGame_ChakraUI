@@ -102,6 +102,10 @@ class SocketService {
     this.socket?.on("withdraw_success", callback);
   }
 
+  onErrorCallBack(callback: (data: string) => void) {
+    this.socket?.on("error", callback);
+  }
+
   placeBet(amount: number) {
     if (!this.socket) return console.error("Socket not initialized");
     this.socket.emit("place_bet", { amount });

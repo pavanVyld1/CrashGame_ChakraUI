@@ -115,9 +115,7 @@ export default function HomePage() {
               console.log("Session Info:", data);
             });
 
-            SocketManager.onBetPlaced((data) => {
-              console.log("Bet Placed:", data);
-            });
+           
 
             SocketManager.onCrash((data) => {
               console.log("Crash :", data);

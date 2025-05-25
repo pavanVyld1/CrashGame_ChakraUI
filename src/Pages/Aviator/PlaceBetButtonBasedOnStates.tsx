@@ -1,9 +1,10 @@
 
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BetButtonState, LABELS } from "../../types/projectTypes";
 import DataService  from "../../services/dataService";
 import ApiService , { BetData, CashoutData } from '../../services/ApiService';
+import SocketManager from "../Managers/SocketManager";
 
 const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
   const [buttonState, setButtonState] = useState<BetButtonState>(BetButtonState.Idle);
@@ -16,6 +17,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
   const amount = 100;
   
   const token = localStorage.getItem("token");
+  const toast = useToast();
 
   const getBgColor = () => {
     switch (buttonState) {
@@ -81,28 +83,63 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
       return;
     }
     OnPlaceBetClicked();
-    let bettingData = DataService.getBetData(index); 
 
-    const betData: BetData = {
-      id: index, // example ID
-      amount: bettingData?.amount,
-      sessionId: 'session_123', // replace with actual session ID logic
-    };
+    // try {
+    //   setIsLoading(true);
+    //   const response = await ApiService.placeBet(betData, token);
 
-    try {
+    //   toast({
+    //     title: response.success ? 'Bet Placed' : 'Bet Failed',
+    //     description: response.message,
+    //     status: response.success ? 'success' : 'error',
+    //     duration: 3000,
+    //     isClosable: true,
+    //   });
+    // } catch (err: any) {
+    //   toast({
+    //     title: 'API Error',
+    //     description: err.message,
+    //     status: 'error',
+    //     duration: 3000,
+    //     isClosable: true,
+    //   });
+    // } finally {
+    //   setIsLoading(false);
+    // }
+
+     try {
       setIsLoading(true);
-      const response = await ApiService.placeBet(betData, token);
+       let bettingData = DataService.getBetData(index); 
+      if(bettingData)
+      {      
+          SocketManager.onBetPlaced((data) => {
+              console.log("Bet Placed:", data);
+              toast({
+                title: data.sessionId ? 'Bet Placed' : 'Bet Failed',
+                description: data.sessionId ? 'Bet Placed' : 'Bet Failed',
+                status: data.sessionId ? 'success' : 'error',
+                duration: 3000,
+                isClosable: true,
+              });
+          });
 
-      toast({
-        title: response.success ? 'Bet Placed' : 'Bet Failed',
-        description: response.message,
-        status: response.success ? 'success' : 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+          SocketManager.OnError((data) => {
+              console.log("Bet Placed: Error", data);
+              toast({
+                title: data ? 'Bet Failed Error' : 'Bet Failed Error',
+                description: data,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+              });
+          });
+
+          SocketManager.placeBet(bettingData.amount);
+      }
+      
     } catch (err: any) {
       toast({
-        title: 'API Error',
+        title: 'Error',
         description: err.message,
         status: 'error',
         duration: 3000,
@@ -259,7 +296,3 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
 };
 
 export default PlaceBetButtonStateComponent;
-function toast(arg0: { title: string; description: string; status: string; duration: number; isClosable: boolean; }) {
-  throw new Error("Function not implemented.");
-}
-

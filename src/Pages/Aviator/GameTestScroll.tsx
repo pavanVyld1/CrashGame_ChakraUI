@@ -11,6 +11,7 @@ import { SpinePlugin } from "@esotericsoftware/spine-phaser";
 import { Box, useBreakpointValue ,Text , useToast } from '@chakra-ui/react';
 import PlayersList from './PlayerList';
 import { useOrientation } from '../../hooks/useOrientation';
+import CrashGameMainScene from '../../PhaserGame/KingFisher/scenes/CrashGameMainScene';
 
 // const GameTestScroll: React.FC = () =>{//React.FC<{ width: number; height: number }> = ({ width, height }) => {
 const GameTestScroll: React.FC<{ width: number; height: number }> = ({ width, height }) => {
@@ -102,7 +103,8 @@ const GameTestScroll: React.FC<{ width: number; height: number }> = ({ width, he
       width: width,
       height: height,
       backgroundColor: '#87CEEB',
-      scene: [new TestScrollScene()],
+      // scene: [new TestScrollScene()],
+      scene: [new CrashGameMainScene()],
       scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH,

@@ -23,6 +23,7 @@ class SocketManager {
   private betPlacedCallbacks: Callback<BetPlacedData>[] = [];
   private withdrawSuccessCallbacks: Callback<WithdrawSuccessData>[] = [];
   private sessionInfoCallbacks: Callback<any>[] = [];
+  private sessionErrorCallbacks: Callback<any>[] = [];
 
   private constructor() {}
 
@@ -45,7 +46,8 @@ class SocketManager {
     SocketService.onBetPlaced((data) => this.betPlacedCallbacks.forEach(cb => cb(data)));
     SocketService.onWithdrawSuccess((data) => this.withdrawSuccessCallbacks.forEach(cb => cb(data)));
     SocketService.onSessionInfo((data) => this.sessionInfoCallbacks.forEach(cb => cb(data)));
-  }
+    SocketService.onErrorCallBack((data) => this.sessionErrorCallbacks.forEach(cb => cb(data)));
+}
 
   // 🎯 Subscribe Methods
   onSessionStart(callback: Callback<SessionStartData>) {
@@ -82,6 +84,10 @@ class SocketManager {
 
   onSessionInfo(callback: Callback<any>) {
     this.sessionInfoCallbacks.push(callback);
+  }
+
+  OnError(callback: Callback<any>){
+    this.sessionErrorCallbacks.push(callback);
   }
 
   // 💰 Emit Methods
