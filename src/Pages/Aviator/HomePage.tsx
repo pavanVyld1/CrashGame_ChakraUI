@@ -1,5 +1,5 @@
 // src/pages/HomePage.tsx
-import { Box, Button, Flex, Heading, Text ,useBreakpointValue, useMediaQuery} from '@chakra-ui/react'
+import { Box, Button, Flex, Heading, Text ,useBreakpointValue, useMediaQuery, useToast} from '@chakra-ui/react'
 import  Header from './Header';
 
 import  PlayersList from './PlayerList';
@@ -18,6 +18,8 @@ import { GameConstants } from '../../types/projectTypes';
 import { API_CONSTANTS } from '../../types/dataConstants';
 import SocketManager from '../Managers/SocketManager';
 import CrashGameComponent from '../../components/CrashGameComponent';
+import ApiService from '../../services/ApiService';
+import DataService, { PlayerData }  from "../../services/dataService";
 // import GameComponent from './GameComponent';
 
 // export default function HomePage() {
@@ -60,6 +62,7 @@ export default function HomePage() {
   const homePageref = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
+  const toast = useToast();
 
   console.log("Width Name : "+ isMobileWidthName);
   const [readyToRenderGame, setReadyToRenderGame] = useState(false);
@@ -103,35 +106,56 @@ export default function HomePage() {
       console.log("Home Page Trying to Connect");
       if(token){
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
+          requestAnimationFrame(async () => {
           // setTimeout(updateDimensions, 0);
             console.log("Home page Use effect called");
             updateDimensions();
             if(token){
+              try {
+                const response = await ApiService.getPlayerData(token);
+
+                console.log("Home page Setting Player Data " + JSON.stringify(response));
+                const user = response.data;
+                const playerData: PlayerData = {
+                  id: user._id,
+                  name: user.name,
+                  email: user.email,
+                  wallet: user.wallet
+                };
+                console.log("Home page Setting Player Data After : " + JSON.stringify(playerData));
+                DataService.setPlayerData(playerData);
+              }
+              catch (err: any) {
+                toast({
+                  title: 'Authentication failed',
+                  description: err?.response?.message || 'Something went wrong',
+                  status: 'error',
+                  duration: 3000,
+                  isClosable: true,
+                });
+              }
+              
               SocketManager.onSessionStart((data) => {
-              console.log("Session started:", data);
-            });
+                console.log("Session started:", data);
+              });
 
-            SocketManager.onSessionInfo((data) => {
-              console.log("Session Info:", data);
-            });
+              SocketManager.onSessionInfo((data) => {
+                console.log("Session Info:", data);
+              });
 
-           
+              SocketManager.onCrash((data) => {
+                console.log("Crash :", data);
+              });
 
-            SocketManager.onCrash((data) => {
-              console.log("Crash :", data);
-            });
+              SocketManager.onTick((tick) => {
+                console.log("Tick:", tick.value);
+              });
 
-            SocketManager.onTick((tick) => {
-              console.log("Tick:", tick.value);
-            });
+              SocketManager.onSessionState((data) => {
+                console.log("SessionState:", data);
+              });
 
-            SocketManager.onSessionState((data) => {
-              console.log("SessionState:", data);
-            });
-
-            SocketManager.initSocket(token.toString(), API_CONSTANTS.SOCKET_URL);
-
+              SocketManager.initSocket(token.toString(), API_CONSTANTS.SOCKET_URL);
             }
         });
       });

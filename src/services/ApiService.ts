@@ -33,10 +33,26 @@ export interface LoginResponseData {
   user: User;
 }
 
-export interface PlayerData {
-  id: string;
-  balance: number;
-  username: string;
+// export interface PlayerData {
+//   _id: string;
+//   balance: number;
+//   username: string;
+// }
+
+export interface ProfileDataResponse {
+  code: number;
+  message: string;
+  data: ProfileData;
+}
+
+export interface ProfileData {
+   _id: string;
+  email: string;
+  name: string;
+  wallet: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
 export interface BetData {
@@ -121,7 +137,7 @@ class ApiService {
 
   // ✅ Get Player Data
   getPlayerData(token: string) {
-    return this.request<PlayerData>(API_CONSTANTS.PROFILE, 'GET', undefined, token);
+    return this.request<ProfileDataResponse>(API_CONSTANTS.PROFILE, 'GET', undefined, token);
   }
 
   // ✅ Place Bet

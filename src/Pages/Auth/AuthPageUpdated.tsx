@@ -11,6 +11,7 @@ import { LABELS } from '../../types/projectTypes';
 import socketService from '../../services/socketService';
 import { Console } from 'console';
 import SocketManager from '../Managers/SocketManager';
+import DataService, { PlayerData }  from "../../services/dataService";
 
 const AuthPagerUpdated: React.FC = () => {
   const navigate = useNavigate();
@@ -36,15 +37,33 @@ const AuthPagerUpdated: React.FC = () => {
     setLoading(true);
 
     try {
-      const data = isLogin
+      const loginResponse = isLogin
         ? await ApiService.login(loginForm)
         : await ApiService.register(registerForm);
 
       // Save profile and token
-      localStorage.setItem('token', data.data.token);
-      localStorage.setItem('user', JSON.stringify(data.data.user));
+      localStorage.setItem('token', loginResponse.data.token);
+      localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
 
-      console.log("Login Success : " + data.data.token);
+      console.log("Login Response : " + JSON.stringify(loginResponse));
+      const user = loginResponse.data.user;
+
+//       console.log("Player Data Fields:");
+//       console.log("ID:", user._id);
+//       console.log("Name:", user.name);
+// console.log("Email:", user.email);
+// console.log("Wallet:", user.wallet);  
+
+      const playerData: PlayerData = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        wallet: user.wallet ?? 0
+      };
+      console.log("Login Response : Player Data " + JSON.stringify(playerData));
+      DataService.setPlayerData(playerData);
+
+      console.log("Login Success : " + loginResponse.data.token);
       toast({
         title: isLogin ? 'Login successful' : 'Registration successful',
         status: 'success',

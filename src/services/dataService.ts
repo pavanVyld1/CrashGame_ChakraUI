@@ -44,7 +44,8 @@ class DataService {
   // ------------------------------
   public setPlayerData(data: PlayerData): void {
     this.playerData = data;
-    localStorage.setItem('user', JSON.stringify(data));
+    // localStorage.setItem('user', JSON.stringify(data));
+    console.log("SetPlayer Data : " + JSON.stringify(data));
     window.dispatchEvent(new Event('walletUpdated'));
   }
 
@@ -63,7 +64,7 @@ class DataService {
   public updateWallet(amount: number): void {
     if (this.playerData) {
       this.playerData.wallet = amount;
-      this.setPlayerData(this.playerData);
+      window.dispatchEvent(new Event('walletUpdated'));
     }
   }
 
@@ -128,6 +129,18 @@ class DataService {
   public getMaxMultiplierValue(): number {
     return GameConstants.MAX_MULTIPLIER;
     // return this.maxMultiplier;
+  }
+
+  public GetToken(): string | null{
+    return localStorage.getItem('token');
+  }
+
+  public GetWalletBalance(): number {
+    if(this.playerData){
+      return this.playerData?.wallet;
+    }else {
+      return 0;
+    }
   }
 }
 

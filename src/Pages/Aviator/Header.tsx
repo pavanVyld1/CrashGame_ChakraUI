@@ -3,6 +3,7 @@ import { Button, Flex, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { LABELS } from '../../types/projectTypes';
 import { useNavigate } from 'react-router-dom';
+import DataService  from "../../services/dataService";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -18,17 +19,16 @@ const Header = () => {
 
   useEffect(() => {
     const loadWallet = () => {
-      const userString = localStorage.getItem('user');
-      if (userString) {
-        const user = JSON.parse(userString);
-        setWallet(user.wallet || 0);
-      }
+      setWallet(DataService.GetWalletBalance());
     };
 
     loadWallet();
 
     // Optional: Listen to custom wallet update events
-    window.addEventListener('walletUpdated', loadWallet);
+    window.addEventListener('walletUpdated', ()=> {
+      console.log("walletupdater is called Header");
+      loadWallet();
+    });
 
     return () => {
       window.removeEventListener('walletUpdated', loadWallet);

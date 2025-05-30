@@ -78,30 +78,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
       });
       return;
     }
-    console.log("Placing the Bet");
-
-    // try {
-    //   setIsLoading(true);
-    //   const response = await ApiService.placeBet(betData, token);
-
-    //   toast({
-    //     title: response.success ? 'Bet Placed' : 'Bet Failed',
-    //     description: response.message,
-    //     status: response.success ? 'success' : 'error',
-    //     duration: 3000,
-    //     isClosable: true,
-    //   });
-    // } catch (err: any) {
-    //   toast({
-    //     title: 'API Error',
-    //     description: err.message,
-    //     status: 'error',
-    //     duration: 3000,
-    //     isClosable: true,
-    //   });
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    console.log("Placing the Bet : " + index);
 
      try {
       setIsLoading(true);
@@ -181,7 +158,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
       });
       return;
     }
-    OnCollectClicked();
+    // OnCollectClicked();
     let bettingData = DataService.getBetData(index); 
 
     const betData: CashoutData = {
@@ -218,7 +195,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
     }
   };
 
-  const onStateChange = (newState: GameState): void => {  
+  const onGameStateChange = (newState: GameState): void => {  
       console.log("Game State Changed to : " + newState)
       switch (newState) {
         case "init":
@@ -273,7 +250,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
     };
 
   const handleButtonStateChange = (state: BetButtonState) => {
-    console.error('Button state changed to:', state);
+    console.error('Button state changed to: index :' + index + ' state : ' + state.toString());
     setIsDisabled(false);
     switch (buttonState) {
       case BetButtonState.Idle: 
@@ -312,16 +289,17 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
     setButtonState(BetButtonState.Idle);
 
     SocketManager.onSessionInfo((data)=>{
-      console.log("Received session Info:", data.state);
+      console.log("Received session Info: ", data.state);
+      onGameStateChange(data.state);
     });
 
     SocketManager.onSessionState((data)=>{
-      console.log("Received session state:", data);
-      onStateChange(data);
+      console.log("Received session state: ", data);
+      onGameStateChange(data);
     });
 
     SocketManager.onBetPlaced((data) => {
-      console.log("Bet Placed:", data);
+      console.log("Bet Placed: " + data + " Index : " + index );
       OnPlaceBetClicked();
       toast({
         title: data.sessionId ? 'Bet Placed' : 'Bet Failed',
@@ -356,7 +334,7 @@ const PlaceBetButtonStateComponent = ({ index }: { index: number }) => {
 
     SocketManager.onCrash((data) => {
       console.log("Crashed :", data);
-      onStateChange("crashed");
+      onGameStateChange("crashed");
     });
     
   }, []);

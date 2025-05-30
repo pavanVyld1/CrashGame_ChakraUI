@@ -20,7 +20,7 @@ import { FaBold } from "react-icons/fa";
 import Header from "./Header";
 import { useOrientation } from "../../hooks/useOrientation";
 import GameCanvas from "./GameCanvas";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PlaceBetButtonComponent from "./PlaceBetButtonComponent";
 import BettingControls from "./BettingControl";
 
@@ -281,6 +281,11 @@ const BettingControlsComponent = () => {
   //     </Stack>
   //   </Flex>
   // );
+
+  useEffect(() => {
+  console.log("Component mounted BettingControlsComponent");
+  return () => console.log("Component unmounted BettingControlsComponent");
+}, []);
 
   return (
     <Flex
