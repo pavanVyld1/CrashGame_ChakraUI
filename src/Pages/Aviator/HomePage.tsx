@@ -17,6 +17,7 @@ import socketService from '../../services/socketService';
 import { GameConstants } from '../../types/projectTypes';
 import { API_CONSTANTS } from '../../types/dataConstants';
 import SocketManager from '../Managers/SocketManager';
+import CrashGameComponent from '../../components/CrashGameComponent';
 // import GameComponent from './GameComponent';
 
 // export default function HomePage() {
@@ -168,8 +169,13 @@ export default function HomePage() {
               <BettingControlsComponent />
             </Box>
             <Box order={0} ref={gamecontainerRef}>
-              {dimensions != null && <GameTestScroll width={dimensions.width} height={dimensions.height}/>}
+              {/* {dimensions != null && <GameTestScroll width={dimensions.width} height={dimensions.height}/>} */}
               {/* <GameCanvas/> */}
+              {dimensions != null && (
+                // <Box w={dimensions.width} h={dimensions.height}>
+                  <CrashGameComponent width={dimensions.width} height={dimensions.height}/>
+                // </Box>  
+              )}
             </Box>
           </Flex>
 

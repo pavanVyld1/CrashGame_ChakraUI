@@ -1,7 +1,16 @@
 // src/services/SocketService.ts
 import { io, Socket } from "socket.io-client";
 
-export type GameState = 'waiting' | 'starting' | 'started' | 'crashed';
+// export type GameState = 'waiting' | 'starting' | 'started' | 'crashed';
+export type GameState =
+  | "init"
+  | "ready"
+  | "waiting_for_bet"
+  | "starting"
+  | "started"
+  | "running"
+  | "crashed"
+  | "end";
 
 type GameEventCallback = (...args: any[]) => void;
 
@@ -75,6 +84,7 @@ class SocketService {
   }
 
   onSessionInfo(callback: (data: any) => void) {
+    console.log("Received session Info: ");
     this.socket?.on("session_info", callback);
   }
 

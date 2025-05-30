@@ -4,11 +4,12 @@ import { FaBold } from "react-icons/fa";
 import Header from "./Header";
 import { useOrientation } from "../../hooks/useOrientation";
 import GameCanvas from "./GameCanvas";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PlaceBetButtonComponent from "./PlaceBetButtonComponent";
 import PlaceBetButtonStateComponent from "./PlaceBetButtonBasedOnStates";
 import DataService from "../../services/dataService";
 import { GameConstants, LABELS } from "../../types/projectTypes";
+import dataService from "../../services/dataService";
 const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
     const isMobileWidth = useBreakpointValue({ base: true, sm: true, md: false , lg: false, xl: false});
     const isMobileWidthName = useBreakpointValue({ base: "base", sm: "small", md: "md" , lg: "large", xl: "xl"});
@@ -112,6 +113,13 @@ const BettingControls = ({ controlIndex }: { controlIndex: number }) => {
     // const data =  GameCanvas();
     // console.log("Placebet is clicked " + data);
   }
+
+  useEffect(() => {
+      console.log("Betting controls Component mounted");
+      
+      DataService.updateBetAmount(controlIndex,betAmount);
+      DataService.updateMultiplier(controlIndex,betMultiplier);
+    }, []);
 
   return (
     <Stack spacing={4} >
