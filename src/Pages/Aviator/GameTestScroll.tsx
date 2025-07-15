@@ -103,8 +103,8 @@ const GameTestScroll: React.FC<{ width: number; height: number }> = ({ width, he
       width: width,
       height: height,
       backgroundColor: '#87CEEB',
-      // scene: [new TestScrollScene()],
-      scene: [new CrashGameMainScene()],
+      scene: [new TestScrollScene()],
+      // scene: [new CrashGameMainScene()],
       scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH,

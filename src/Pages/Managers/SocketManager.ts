@@ -47,9 +47,30 @@ class SocketManager {
     SocketService.onWithdrawSuccess((data) => this.withdrawSuccessCallbacks.forEach(cb => cb(data)));
     SocketService.onSessionInfo((data) => this.sessionInfoCallbacks.forEach(cb => cb(data)));
     SocketService.onErrorCallBack((data) => this.sessionErrorCallbacks.forEach(cb => cb(data)));
-}
+  }
 
-  // 🎯 Subscribe Methods
+  // Emit Methods
+  placeBet(amount: number) {
+    SocketService.placeBet(amount);
+  }
+
+  withdraw() {
+    SocketService.withdraw();
+  }
+
+  disconnect() {
+    SocketService.disconnect();
+  }
+
+  isConnected(): boolean {
+    return SocketService.isConnected();
+  }
+
+  getSocketId(): string | null {
+    return SocketService.getSocketId();
+  }
+
+  //Subscribe Methods
   onSessionStart(callback: Callback<SessionStartData>) {
     this.sessionStartCallbacks.push(callback);
   }
@@ -86,29 +107,64 @@ class SocketManager {
     this.sessionInfoCallbacks.push(callback);
   }
 
-  OnError(callback: Callback<any>){
+  onError(callback: Callback<any>){
     this.sessionErrorCallbacks.push(callback);
   }
 
-  // 💰 Emit Methods
-  placeBet(amount: number) {
-    SocketService.placeBet(amount);
+  //Deregister methods
+  offSessionStart(callback: Callback<SessionStartData>) {
+    this.sessionStartCallbacks = this.sessionStartCallbacks.filter(cb => cb !== callback);
   }
 
-  withdraw() {
-    SocketService.withdraw();
+  offSessionState(callback: Callback<GameState>) {
+    this.sessionStateCallbacks = this.sessionStateCallbacks.filter(cb => cb !== callback);
   }
 
-  disconnect() {
+  offTick(callback: Callback<TickData>) {
+    this.tickCallbacks = this.tickCallbacks.filter(cb => cb !== callback);
+  }
+
+  offCrash(callback: Callback<CrashData>) {
+    this.crashCallbacks = this.crashCallbacks.filter(cb => cb !== callback);
+  }
+
+  offPayout(callback: Callback<PayoutData>) {
+    this.payoutCallbacks = this.payoutCallbacks.filter(cb => cb !== callback);
+  }
+
+  offLost(callback: Callback<{ message: string }>) {
+    this.lostCallbacks = this.lostCallbacks.filter(cb => cb !== callback);
+  }
+
+  offBetPlaced(callback: Callback<BetPlacedData>) {
+    this.betPlacedCallbacks = this.betPlacedCallbacks.filter(cb => cb !== callback);
+  }
+
+  offWithdrawSuccess(callback: Callback<WithdrawSuccessData>) {
+    this.withdrawSuccessCallbacks = this.withdrawSuccessCallbacks.filter(cb => cb !== callback);
+  }
+
+  offSessionInfo(callback: Callback<any>) {
+    this.sessionInfoCallbacks = this.sessionInfoCallbacks.filter(cb => cb !== callback);
+  }
+
+  offError(callback: Callback<any>) {
+    this.sessionErrorCallbacks = this.sessionErrorCallbacks.filter(cb => cb !== callback);
+  }
+
+  ResetSocket() {
+    SocketService.offSessionStart((data) => this.sessionStartCallbacks.forEach(cb => cb(data)));
+    SocketService.offSessionState((state) => this.sessionStateCallbacks.forEach(cb => cb(state)));
+    SocketService.offTick((data) => this.tickCallbacks.forEach(cb => cb(data)));
+    SocketService.offCrash((data) => this.crashCallbacks.forEach(cb => cb(data)));
+    SocketService.offPayout((data) => this.payoutCallbacks.forEach(cb => cb(data)));
+    SocketService.offLost((data) => this.lostCallbacks.forEach(cb => cb(data)));
+    SocketService.offBetPlaced((data) => this.betPlacedCallbacks.forEach(cb => cb(data)));
+    SocketService.offWithdrawSuccess((data) => this.withdrawSuccessCallbacks.forEach(cb => cb(data)));
+    SocketService.offSessionInfo((data) => this.sessionInfoCallbacks.forEach(cb => cb(data)));
+    SocketService.offErrorCallBack((data) => this.sessionErrorCallbacks.forEach(cb => cb(data)));
+
     SocketService.disconnect();
-  }
-
-  isConnected(): boolean {
-    return SocketService.isConnected();
-  }
-
-  getSocketId(): string | null {
-    return SocketService.getSocketId();
   }
 }
 

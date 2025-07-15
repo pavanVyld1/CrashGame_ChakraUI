@@ -4,7 +4,9 @@ import Phaser from "phaser";
 export default class TestScrollScene extends Phaser.Scene {
 
       //Tile Scroll
-        private tile_bg!: Phaser.GameObjects.TileSprite;
+        private tile_bg_1!: Phaser.GameObjects.TileSprite;
+        private tile_bg_2!: Phaser.GameObjects.TileSprite;
+        private tile_bg_3!: Phaser.GameObjects.TileSprite;
         private tile_fog!: Phaser.GameObjects.TileSprite;
         private tile_fg!: Phaser.GameObjects.TileSprite;
         private tile_tree!: Phaser.GameObjects.TileSprite;
@@ -14,7 +16,10 @@ export default class TestScrollScene extends Phaser.Scene {
     }
     
     preload(){
-        this.load.image("tile_Bg","assets/tileImages/background.png");
+        this.load.image("tile_Bg_1","assets/tileImages/bg_layer_1.png");
+        this.load.image("tile_Bg_2","assets/tileImages/bg_layer_2.png");
+        this.load.image("tile_Bg_3","assets/tileImages/bg_layer_3.png");
+
         this.load.image("tile_fog","assets/tileImages/fog.png")
         this.load.image("tile_fg","assets/tileImages/foreground.png")
         this.load.image("tile_tree","assets/tileImages/trees.png")
@@ -43,12 +48,16 @@ export default class TestScrollScene extends Phaser.Scene {
           this.tile_fog = this.addTileWithScale("tile_fog",width,height);
           this.tile_fog.setDepth(100);
     
-          this.tile_bg = this.addTileWithScale("tile_Bg",width ,height);
-          this.tile_bg.setDepth(50);
-          this.tile_fg = this.addTileWithScale("tile_fg",width,height);
-          this.tile_fg.setDepth(90);
-          this.tile_tree = this.addTileWithScale("tile_tree",width,height)
-          this.tile_tree.setDepth(80);
+          this.tile_bg_1 = this.addTileWithScale("tile_Bg_1",width,height);
+          this.tile_bg_1.setDepth(50);
+          this.tile_bg_2 = this.addTileWithScale("tile_Bg_2",width,height);
+          this.tile_bg_2.setDepth(52);
+          this.tile_bg_3 = this.addTileWithScale("tile_Bg_3",width,height);
+          this.tile_bg_3.setDepth(53);
+          // this.tile_fg = this.addTileWithScale("tile_fg",width,height);
+          // this.tile_fg.setDepth(90);
+          // this.tile_tree = this.addTileWithScale("tile_tree",width,height)
+          // this.tile_tree.setDepth(80);
         }
     
         addTileWithScale(textureName : string, width: number, height: number) : Phaser.GameObjects.TileSprite{
@@ -62,14 +71,20 @@ export default class TestScrollScene extends Phaser.Scene {
         }
 
         getScaleValue(image : Phaser.GameObjects.RenderTexture , width : number, height : number) : {scalex: number, scaley : number}{
-            return {scalex : width / image.width , scaley : height / image.height};
+          const scaleX = width / image.width;
+  const scaleY = height / image.height;
+  const scale = Math.min(scaleX, scaleY); // preserve aspect ratio
+  return { scalex: scale, scaley: scale };  
         }
 
     update(time: number, delta: number): void {
         
-        this.tile_bg.tilePositionX += (0.3);
-      this.tile_tree.tilePositionX += (0.35);
-      this.tile_fg.tilePositionX += (0.5);
-      this.tile_fog.tilePositionX += (0.8);
+      this.tile_bg_1.tilePositionX += (0.3);
+      this.tile_bg_2.tilePositionX += (0.5);
+      this.tile_bg_3.tilePositionX += (1.0);
+
+      // this.tile_tree.tilePositionX += (0.35);
+      // this.tile_fg.tilePositionX += (0.5);
+      // this.tile_fog.tilePositionX += (0.8);
     }   
 }

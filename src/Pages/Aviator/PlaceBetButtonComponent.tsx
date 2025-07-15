@@ -9,7 +9,7 @@ import { BetButtonState, LABELS } from "../../types/projectTypes";
 import DataService  from "../../services/dataService";
 import ApiService , { BetData, CashoutData } from '../../services/ApiService';
 import SocketManager from "../Managers/SocketManager";
-import { GameState } from "../../services/socketService";
+import { BetPlacedData, CrashData, GameState, TickData, WithdrawSuccessData } from "../../services/socketService";
 
 
 const PlaceBetButtonComponent = ({ index }: { index: number }) => { 
@@ -368,26 +368,20 @@ const PlaceBetButtonComponent = ({ index }: { index: number }) => {
        }
        setButtonState(state);
      };
-   
-     useEffect(() => {
-       console.log("Component mounted");
-    //    handleButtonStateChange(BetButtonState.Idle);
-   
-       SocketManager.onSessionInfo((data)=>{
-         console.log("Received session Info:", data.state);
+
+     const onSessionInfoCallBack = (data : any) => {
+        console.log("Received session Info:", data.state);
         //  onGameStateChange(data.state);
         setLocalGameState(data.state);
-       });
-   
-       SocketManager.onSessionState((data)=>{
+     };
+
+     const onSessionStateCallBack = (data : GameState) => {
          console.log("Received session state:", data);
         //  onGameStateChange(data);
         setLocalGameState(data);
-       });
-   
-       console.log("Registering the Callabacks");
+     };
 
-       SocketManager.onBetPlaced(async (data) => {
+     const onBetPlacedCallBack = async (data : BetPlacedData) => {
          console.log("Bet Placed: " + data + " Index : " + index );
          OnPlaceBetClicked(currentIndex);
          let token = DataService.GetToken();
@@ -405,52 +399,75 @@ const PlaceBetButtonComponent = ({ index }: { index: number }) => {
            duration: 3000,
            isClosable: true,
          });
-       });
+     };
+
+     const onWithDrawSuccessCallBack = async (data : WithdrawSuccessData) => {
+        console.log("withdraw success ", data);
+        OnCollectClicked(currentIndex);
+        let token = DataService.GetToken();
+      if(token){
+        const response = await ApiService.getPlayerData(token);
+        console.log("response : " + response);
+        if(response){
+          DataService.updateWallet(response.data.wallet);
+        }
+      }
+        toast({
+          title: 'withdraw success',
+          description: 'Amount : ' + data.payout,
+          duration: 3000,
+          isClosable: true,
+        });
+     };
    
-       SocketManager.OnError((data) => {
-           console.log("Bet Placed: Error", data);
-           toast({
-             title: data ? 'Bet Failed Error' : 'Bet Failed Error',
-             description: data,
-             status: 'error',
-             duration: 3000,
-             isClosable: true,
-           });
-       });
-   
-        SocketManager.onWithdrawSuccess(async (data) => {
-           console.log("withdraw success ", data);
-           OnCollectClicked(currentIndex);
-           let token = DataService.GetToken();
-          if(token){
-            const response = await ApiService.getPlayerData(token);
-            console.log("response : " + response);
-           if(response){
-              DataService.updateWallet(response.data.wallet);
-            }
-          }
-           toast({
-             title: 'withdraw success',
-             description: 'Amount : ' + data.payout,
-             duration: 3000,
-             isClosable: true,
-           });
-       });
-   
-       SocketManager.onCrash((data) => {
-         console.log("Crashed :", data);
+     const onCrashCallBack = (data : CrashData) => {
+        console.log("Crashed :", data);
         //  onGameStateChange("crashed");
         setLocalGameState('crashed');
-       });
+     };
 
-        SocketManager.onTick((tick) => {
-            console.log("Received tick:", tick.value + " Placed bet : " + placedBetRef.current + " Button State : " + buttonStateRef.current + " Local game State : " + localGameStateRef.current);
+     const onMultiplierTickCallBack = (tick : TickData) => {
+        console.log("Received tick:", tick.value + " Placed bet : " + placedBetRef.current + " Button State : " + buttonStateRef.current + " Local game State : " + localGameStateRef.current);
 
-            if(placedBetRef && buttonStateRef.current === BetButtonState.Collect){
-                setDisplayAmount(placedBetRef.current * tick.value);
-            }
+        if(placedBetRef && buttonStateRef.current === BetButtonState.Collect){
+            setDisplayAmount(placedBetRef.current * tick.value);
+        }
+     };
+
+     const onSocketErrorCallBack = (data : any) => {
+        console.log("Bet Placed: Error", data);
+        toast({
+          title: data ? 'Bet Failed Error' : 'Bet Failed Error',
+          description: data,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
         });
+     };
+
+     useEffect(() => {
+       console.log("Component mounted");
+    //    handleButtonStateChange(BetButtonState.Idle);
+       console.log("Registering the Callabacks");
+
+       SocketManager.onSessionInfo(onSessionInfoCallBack);
+       SocketManager.onSessionState(onSessionStateCallBack);
+       SocketManager.onBetPlaced(onBetPlacedCallBack);
+       SocketManager.onError(onSocketErrorCallBack);
+       SocketManager.onWithdrawSuccess(onWithDrawSuccessCallBack);
+       SocketManager.onCrash(onCrashCallBack);
+       SocketManager.onTick(onMultiplierTickCallBack);
        
+      return () => {
+        SocketManager.offSessionInfo(onSessionInfoCallBack);
+        SocketManager.offSessionState(onSessionStateCallBack);
+        SocketManager.offBetPlaced(onBetPlacedCallBack);
+        SocketManager.offError(onSocketErrorCallBack);
+        SocketManager.offWithdrawSuccess(onWithDrawSuccessCallBack);
+        SocketManager.offCrash(onCrashCallBack);
+        SocketManager.onTick(onMultiplierTickCallBack);
+      };
+
      }, []);
    
      useEffect(() => {
@@ -468,6 +485,7 @@ const PlaceBetButtonComponent = ({ index }: { index: number }) => {
      useEffect(() => {
        console.log("Placed Bet Use Effect : " + localGameState);
        placedBetRef.current = placedBetAmount;
+       setDisplayAmount(placedBetRef.current);
      }, [placedBetAmount]);
 
 

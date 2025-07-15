@@ -425,9 +425,9 @@ export default class CrashGameMainScene extends BaseScene {
           this.uiCam
         ];
 
-        const appleSpine = this.add.spine(this.scale.width / 2, this.scale.height - 100, 'apple_json','apple_atlas').setOrigin(0.5, 0.5).setScale(0.5);
+        // const appleSpine = this.add.spine(this.scale.width / 2, this.scale.height - 100, 'apple_json','apple_atlas').setOrigin(0.5, 0.5).setScale(0.5);
 
-        appleSpine.animationState.addAnimation(0,'win',true,0);
+        // appleSpine.animationState.addAnimation(0,'win',true,0);
     }
 
     private resizeGame(gameSize: Phaser.Structs.Size) {

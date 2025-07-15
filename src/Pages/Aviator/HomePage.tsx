@@ -165,7 +165,7 @@ export default function HomePage() {
     }
     // window.addEventListener("resize", updateDimensions);
     return () => {
-      SocketManager.disconnect();
+      SocketManager.ResetSocket();
       // window.removeEventListener("resize", updateDimensions);
     }
   },[]);
@@ -193,13 +193,14 @@ export default function HomePage() {
               <BettingControlsComponent />
             </Box>
             <Box order={0} ref={gamecontainerRef}>
-              {/* {dimensions != null && <GameTestScroll width={dimensions.width} height={dimensions.height}/>} */}
+              {dimensions != null && <GameTestScroll width={dimensions.width} height={dimensions.height}/>}
               {/* <GameCanvas/> */}
-              {dimensions != null && (
+              {/* {
+              dimensions != null && (
                 // <Box w={dimensions.width} h={dimensions.height}>
                   <CrashGameComponent width={dimensions.width} height={dimensions.height}/>
                 // </Box>  
-              )}
+              )} */}
             </Box>
           </Flex>
 

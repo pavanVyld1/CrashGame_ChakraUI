@@ -6,7 +6,6 @@ import { useOrientation } from "../../hooks/useOrientation";
 import GameCanvas from "./GameCanvas";
 import { useEffect, useState } from "react";
 import PlaceBetButtonComponent from "./PlaceBetButtonComponent";
-import PlaceBetButtonStateComponent from "./PlaceBetButtonBasedOnStates";
 import DataService from "../../services/dataService";
 import { GameConstants, LABELS } from "../../types/projectTypes";
 const BettingControls = ({ controlIndex }: { controlIndex: number }) => {

@@ -73,6 +73,7 @@ class SocketService {
     });
   }
 
+  //Register to callback
   onSessionStart(callback: (data: SessionStartData) => void) {
     console.log("Socket Service : OnSessionStart");
     this.socket?.on("session_start", callback);
@@ -114,6 +115,49 @@ class SocketService {
 
   onErrorCallBack(callback: (data: string) => void) {
     this.socket?.on("error", callback);
+  }
+
+//DeRegister Callbacks
+  offSessionStart(callback: (data: SessionStartData) => void) {
+    this.socket?.off("session_start", callback);
+  }
+
+  offSessionState(callback: (state: GameState) => void) {
+    // Note: Only works if the exact same callback reference was used in `onSessionState`
+    this.socket?.off("session_state", callback);
+    this.socket?.off("session_update", callback);
+  }
+
+  offSessionInfo(callback: (data: any) => void) {
+    this.socket?.off("session_info", callback);
+  }
+
+  offTick(callback: (data: TickData) => void) {
+    this.socket?.off("tick", callback);
+  }
+
+  offCrash(callback: (data: CrashData) => void) {
+    this.socket?.off("crash", callback);
+  }
+
+  offPayout(callback: (data: PayoutData) => void) {
+    this.socket?.off("payout", callback);
+  }
+
+  offLost(callback: (data: { message: string }) => void) {
+    this.socket?.off("lost", callback);
+  }
+
+  offBetPlaced(callback: (data: BetPlacedData) => void) {
+    this.socket?.off("bet_placed", callback);
+  }
+
+  offWithdrawSuccess(callback: (data: WithdrawSuccessData) => void) {
+    this.socket?.off("withdraw_success", callback);
+  }
+
+  offErrorCallBack(callback: (data: string) => void) {
+    this.socket?.off("error", callback);
   }
 
   placeBet(amount: number) {
