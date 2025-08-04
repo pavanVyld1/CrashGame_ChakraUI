@@ -9,7 +9,7 @@ export default class TestScrollScene extends Phaser.Scene {
         private tile_bg_3!: Phaser.GameObjects.TileSprite;
         private tile_fog!: Phaser.GameObjects.TileSprite;
         private tile_fg!: Phaser.GameObjects.TileSprite;
-        private tile_tree!: Phaser.GameObjects.TileSprite;
+        private tile_mid_ground!: Phaser.GameObjects.TileSprite;
 
     constructor() {
         super({ key: 'TestScrollScene' });
@@ -23,6 +23,7 @@ export default class TestScrollScene extends Phaser.Scene {
         this.load.image("tile_fog","assets/tileImages/fog.png")
         this.load.image("tile_fg","assets/tileImages/foreground.png")
         this.load.image("tile_tree","assets/tileImages/trees.png")
+        this.load.image("tile_mid_ground","assets/tileImages/mid_ground_1.png")
 
         //Adding the Spline
         this.load.image('apple_img','assets/spine/apple.png');
@@ -45,25 +46,29 @@ export default class TestScrollScene extends Phaser.Scene {
     
           console.log("Scele : W" + width + " H : " + height);
 
-          this.tile_fog = this.addTileWithScale("tile_fog",width,height);
-          this.tile_fog.setDepth(100);
+          this.tile_fog = this.addTileWithScale("tile_fog",width,height,0);
+          this.tile_fog.setOrigin(0,-0.05);
+          this.tile_fog.setDepth(80);
     
-          this.tile_bg_1 = this.addTileWithScale("tile_Bg_1",width,height);
+          this.tile_bg_1 = this.addTileWithScale("tile_Bg_1",width,height,0);
           this.tile_bg_1.setDepth(50);
-          this.tile_bg_2 = this.addTileWithScale("tile_Bg_2",width,height);
+          this.tile_bg_2 = this.addTileWithScale("tile_Bg_2",width,height,0);
           this.tile_bg_2.setDepth(52);
-          this.tile_bg_3 = this.addTileWithScale("tile_Bg_3",width,height);
+          this.tile_bg_3 = this.addTileWithScale("tile_Bg_3",width,height,0);
           this.tile_bg_3.setDepth(53);
-          // this.tile_fg = this.addTileWithScale("tile_fg",width,height);
-          // this.tile_fg.setDepth(90);
+          this.tile_fg = this.addTileWithScale("tile_fg",width,height,0);
+          this.tile_fg.setDepth(90);
+          this.tile_mid_ground = this.addTileWithScale("tile_mid_ground",width,height,10)
+          this.tile_mid_ground.setDepth(85);
           // this.tile_tree = this.addTileWithScale("tile_tree",width,height)
           // this.tile_tree.setDepth(80);
         }
     
-        addTileWithScale(textureName : string, width: number, height: number) : Phaser.GameObjects.TileSprite{
+        addTileWithScale(textureName : string, width: number, height: number, offset: number) : Phaser.GameObjects.TileSprite{
           let newWidth = width * 2;
           let newhieight= height * 1;
           const tile = this.add.tileSprite(0,0, newWidth,newhieight,textureName).setOrigin(0,0);
+          tile.setX(offset);
           let tex = this.textures.get(textureName).getSourceImage() as Phaser.GameObjects.RenderTexture;
           const {scalex, scaley} = this.getScaleValue(tex, newWidth, newhieight);
           tile.setTileScale(scalex,scaley);
@@ -72,9 +77,9 @@ export default class TestScrollScene extends Phaser.Scene {
 
         getScaleValue(image : Phaser.GameObjects.RenderTexture , width : number, height : number) : {scalex: number, scaley : number}{
           const scaleX = width / image.width;
-  const scaleY = height / image.height;
-  const scale = Math.min(scaleX, scaleY); // preserve aspect ratio
-  return { scalex: scale, scaley: scale };  
+          const scaleY = height / image.height;
+          const scale = Math.min(scaleX, scaleY); // preserve aspect ratio
+          return { scalex: scale, scaley: scale };  
         }
 
     update(time: number, delta: number): void {
@@ -83,8 +88,8 @@ export default class TestScrollScene extends Phaser.Scene {
       this.tile_bg_2.tilePositionX += (0.5);
       this.tile_bg_3.tilePositionX += (1.0);
 
-      // this.tile_tree.tilePositionX += (0.35);
-      // this.tile_fg.tilePositionX += (0.5);
+      this.tile_mid_ground.tilePositionX += (1.4);
+      this.tile_fg.tilePositionX += (1.5);
       // this.tile_fog.tilePositionX += (0.8);
     }   
 }
